@@ -2,19 +2,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class PazzleGame {
+public class PuzzleGame {
     String fileName;
     Parser parser;
-    ArrayList<String[]> pazzelPiecesInput = new ArrayList<String[]>();
+    ArrayList<String[]> puzzelPiecesInput = new ArrayList<String[]>();
 
-    public PazzleGame(String fileName) {
+    public PuzzleGame(String fileName) {
         this.fileName = fileName;
         parser = new Parser(fileName);
     }
 
     public void startParser() throws IOException {
-        pazzelPiecesInput = parser.parse();
-        Iterator<String[]> ot = pazzelPiecesInput.iterator();
+        puzzelPiecesInput = parser.parse();
+        Iterator<String[]> ot = puzzelPiecesInput.iterator();
         while(ot.hasNext()){
             String[] tamp = ot.next();
             System.out.println(tamp[0]);

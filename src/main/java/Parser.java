@@ -14,7 +14,7 @@ public class Parser {
     public ArrayList<String[]> parse() throws IOException{
         File file = new File(fileName);
         ArrayList<String> lines = new ArrayList<String>();
-        ArrayList<String[]> pazzelPiecesInput = new ArrayList<String[]>();
+        ArrayList<String[]> puzzelPiecesInput = new ArrayList<String[]>();
         int numOfLines;
         String temp;
         Scanner sc = null;
@@ -37,13 +37,13 @@ public class Parser {
             while(it.hasNext()){
                 temp = it.next().trim();
                 if(temp.charAt(0) != '#' ){
-                    pazzelPiecesInput.add(temp.split("\\s+", 2));
+                    puzzelPiecesInput.add(temp.split("\\s+", 2));
                 }
             }
         }
         finally {
             sc.close();
         }
-        return pazzelPiecesInput;
+        return puzzelPiecesInput;
     }
 }
