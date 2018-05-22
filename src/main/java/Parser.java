@@ -1,8 +1,6 @@
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Scanner;
+import java.util.*;
 
 public class Parser {
     String fileName;
@@ -32,6 +30,7 @@ public class Parser {
             String part1 = parts[0].trim();
             numOfLines = Integer.parseInt(parts[1].trim());
 
+            //Why num of lines is a number of pieces?
             System.out.println(part1 + "^^" + numOfLines);
 
             while(it.hasNext()){
@@ -45,5 +44,10 @@ public class Parser {
             sc.close();
         }
         return puzzelPiecesInput;
+    }
+
+    public Map<String, int[]> parsedPieces(){
+        Map<String, int[]> puzzlePieces = new HashMap<String, int[]>();
+        return puzzlePieces;
     }
 }
