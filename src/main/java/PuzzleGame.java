@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 
 public class PuzzleGame {
     String fileName;
@@ -27,7 +28,15 @@ public class PuzzleGame {
         return puzzelPiecesInput;
     }
 
-    private void convertLinestoPieces(){};
+    private ArrayList<Piece> convertLinestoPieces(Map<Integer, int[]> parsedPieces){
+        ArrayList<Piece> puzzlePieces = new ArrayList<>();
+
+        for(Map.Entry<Integer,int[]> entry : parsedPieces.entrySet()){
+            Piece piece = new Piece(entry.getKey(), entry.getValue());
+            puzzlePieces.add(piece);
+        }
+        return puzzlePieces;
+    }
 
     private void validateBeforeSolver(){};
 
