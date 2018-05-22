@@ -12,7 +12,7 @@ public class PuzzleGame {
         parser = new Parser(fileName);
     }
 
-    private ArrayList<String[]> startParser() throws IOException {
+    public ArrayList<String[]> startParser() throws IOException {
 
         ArrayList<String[]>  puzzelPiecesInput = parser.parse();
 
