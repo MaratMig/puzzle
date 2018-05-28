@@ -140,7 +140,7 @@ public class PuzzleBoard {
                     matchingForCurrent = pieceIdToHisMatches.get(currentPiece.getId());
                 }
                 if (pieceIdToHisMatches.get(-1).isEmpty()) {
-                    return BAD RESULt;
+                    return result;
                 }
             }
         }
@@ -156,6 +156,6 @@ public class PuzzleBoard {
     }
 
     private List<Piece> getAllMatchingForTL(ArrayList<Piece> pieces) {
-        return null;
+        return pieces.stream().filter(p -> p.getLeft() == 0 && p.getTop() == 0).collect(Collectors.toList());
     }
 }
