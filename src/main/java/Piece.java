@@ -1,17 +1,14 @@
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Piece {
 
     private int id;
     private int[] sides = new int[4];
-    private boolean isUsed;
 
     public Piece(int id, int[] sides) {
         this.id = id;
         this.sides = sides;
-        this.isUsed = false;
     }
 
     public int getId() {
@@ -34,9 +31,6 @@ public class Piece {
         return sides[3];
     }
 
-    public boolean isUsed() {
-        return isUsed;
-    }
 
     public int getSum() {
         int sum = 0;
@@ -53,5 +47,10 @@ public class Piece {
             sidesNum.add(side);
         }
         return sidesNum;
+    }
+
+    @Override
+    public String toString() {
+        return "id=" + id +"(" + getLeft() + ", " + getTop()+ ", " + getRight() + ", " + getBottom()+'}';
     }
 }

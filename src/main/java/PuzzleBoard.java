@@ -4,118 +4,47 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class PuzzleBoard {
-    int numOfLines;
-    ArrayList<Piece> pieces;
+    private int numOfLines;
+    private List<Piece> pieces ;
 
-    private Set<Integer> possibleNumberOfLines(){
-        int numOfPieces = pieces.size();
-        Set<Integer> possibleNumberOfLines = new HashSet<>();
-        possibleNumberOfLines.add(1);
 
-        List<Integer> factors = new ArrayList<>();
-        factors.addAll(Primes.primeFactors(numOfPieces));
-
-        int multiple = 1;
-        for(int factor : factors){
-            multiple*=factor;
-            possibleNumberOfLines.add(multiple);
-            possibleNumberOfLines.add(numOfPieces/multiple);
-        }
-
-        return possibleNumberOfLines;
+    public PuzzleBoard(List<Piece> pieceList, Integer numOfLines) {
+        this.pieces = pieceList;
+        this.numOfLines = numOfLines;
     }
 
-    private boolean isTotalSumZero(){
-        int sum = 0;
-        for(Piece piece : pieces){
-            sum+=piece.getSum();
-        }
-        return sum==0;
-    }
 
-    private List<Corner> findMissingCorners(){
-        List<Corner> missingCorners = new ArrayList<>();
-
-        boolean isTLCornerExist = false;
-        boolean isTRCornerExist = false;
-        boolean isBLCornerExist = false;
-        boolean isBRCornerExist = false;
-
-        for(Piece piece : pieces){
-
-            if(piece.getLeft() == 0 && piece.getTop()==0){
-                isTLCornerExist = true;
-                continue;
-            }
-            if(piece.getTop()==0 && piece.getRight()==0){
-                isTRCornerExist=true;
-                continue;
-            }
-            if(piece.getRight()==0 && piece.getBottom()==0){
-                isBRCornerExist=true;
-                continue;
-            }
-            if(piece.getLeft()==0 && piece.getBottom()==0){
-                isBLCornerExist=true;
-                continue;
-            }
-        }
-
-        if(!isTLCornerExist){
-            missingCorners.add(Corner.TL);
-        }
-        if(!isTRCornerExist){
-            missingCorners.add(Corner.TR);
-        }
-        if(!isBRCornerExist){
-            missingCorners.add(Corner.BR);
-        }
-        if(!isBLCornerExist){
-            missingCorners.add(Corner.BL);
-        }
-
-        return missingCorners;
-    }
-
-    //Number of top and bottom strait sides should be equal;
-    //Number of left and right strait sides should be equal;
-    private boolean isValidNumberOfStraitSides(){
-        long numOfStraitLeft = pieces.stream().filter(p->p.getLeft()==0).count();
-        long numOfStraitRight = pieces.stream().filter(p->p.getRight()==0).count();
-
-        long numOfStraitTop = pieces.stream().filter(p->p.getTop()==0).count();
-        long numOfStraitBottom = pieces.stream().filter(p->p.getBottom()==0).count();
-
-        return (numOfStraitLeft==numOfStraitRight) && (numOfStraitTop==numOfStraitBottom);
-    }
-
-    private Piece[] tryToSolve(ArrayList<Piece> pieces) {
+    public Piece[] tryToSolvePuzzleRectangle() {
 
         Piece[] result = new Piece[pieces.size()];
 
+        int col = pieces.size() / numOfLines;
         //Map of piece id to all matching afterward
         Map<Integer, List<Piece>> pieceIdToHisMatches = new HashMap<>();
         List<Piece> matchingForCurrent = getAllMatchingForTL(pieces);
 
-        //first enty in map is assigned to key = -1 and all posible TL pieces
+        //first entry in map is assigned to key = -1 and all posible TL pieces
         pieceIdToHisMatches.put(-1, matchingForCurrent);
 
         //At the begining all pieces are free for selection.
-        List<Piece> freeToUse = pieces;
+        List<Piece> freeToUse = new ArrayList<>();
+        freeToUse.addAll(pieces);
 
         //index of Pieces in result array.
-        int index = -1;
-        while (index >= 0 || index == pieces.size()) {
+        int i = 0;
+        while (!freeToUse.isEmpty() || isNoAnyMatches(pieceIdToHisMatches)) {
             while (!freeToUse.isEmpty() && !matchingForCurrent.isEmpty()) {
-                index++;
+
                 Piece currentPiece = matchingForCurrent.get(0);
 
                 //currently used Piece should be removed from possible options and from free for selection list of Pieces.
                 matchingForCurrent.remove(currentPiece);
                 freeToUse.remove(currentPiece);
 
-                result[index] = currentPiece;
-                matchingForCurrent = findMatching(freeToUse, currentPiece);
+                result[i] = currentPiece;
+
+                i++;
+                matchingForCurrent = findMatchingInLines(freeToUse, result, i, col);
 
                 //keep selected piece and it's matches for future use if it will be needed to return to this step and select other matching piece.
                 pieceIdToHisMatches.put(currentPiece.getId(), matchingForCurrent);
@@ -124,22 +53,26 @@ public class PuzzleBoard {
             if (freeToUse.isEmpty()) {
                 return result; //Puzzle is solved
             } else {
-                while (matchingForCurrent.isEmpty() || pieceIdToHisMatches.get(-1).isEmpty()) {
+                while (matchingForCurrent.isEmpty() && i>0) {
                     //TODO
                     //add it to free list
-                    freeToUse.add(result[index]);
+                    i--;
+                    freeToUse.add(result[i]);
 
                     //remove last added
-                    result[index] = null;
+                    result[i] = null;
 
-                    index--;
                     //currentPiece = previously added to boardState map
-                    Piece currentPiece = result[index];
+                    if(i>=1){
+                        Piece currentPiece = result[i-1];
 
-                    //currentMatch = boardState.get(id of new currentPiece (acutally - the previous one))
-                    matchingForCurrent = pieceIdToHisMatches.get(currentPiece.getId());
+                        //currentMatch = boardState.get(id of new currentPiece) (acutally - the previous one))
+                        matchingForCurrent = pieceIdToHisMatches.get(currentPiece.getId());
+                    }else{
+                        matchingForCurrent = pieceIdToHisMatches.get(-1);
+                    }
                 }
-                if (pieceIdToHisMatches.get(-1).isEmpty()) {
+                if (isNoAnyMatches(pieceIdToHisMatches)) {
                     return result;
                 }
             }
@@ -147,15 +80,107 @@ public class PuzzleBoard {
         return result;
     }
 
+    private boolean isNoAnyMatches(Map<Integer, List<Piece>> matchingPieces){
+
+        for(Map.Entry entry: matchingPieces.entrySet()){
+            List<Piece> matchingPiecesList = (List<Piece>) entry.getValue();
+            if(!matchingPiecesList.isEmpty()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
     private List<Piece> findMatching(List<Piece> freeToUse, Piece currentPiece) {
-        return null;
+        return freeToUse.stream().filter(p->(p.getLeft()+currentPiece.getRight())==0).collect(Collectors.toList());
     }
 
-    private void moveForward() {
+    private List<Piece> findMatchingInLines(List<Piece> freeToUse, Piece[] board, int place, int col){
+        List<Piece> matchingPieces = new ArrayList<>();
 
+        if(isTRcorner(place, col)){
+            matchingPieces = freeToUse.stream().filter(p->(p.getTop()==0 && p.getRight()==0 && (p.getLeft() + board[place-1].getRight())==0))
+                    .collect(Collectors.toList());
+        }
+
+        if(isBRcorner(place)){
+            matchingPieces = freeToUse.stream().filter(p->
+                    p.getBottom()==0 && p.getRight()==0 &&
+                            p.getLeft() + board[place-1].getRight()==0
+                            && p.getTop() + board[place-col].getBottom()==0)
+                    .collect(Collectors.toList());
+        }
+
+        if(isBLcorner(place, col)){
+            matchingPieces = freeToUse.stream().filter(p->
+                    p.getBottom()==0 && p.getLeft()==0 &&
+                            p.getTop() + board[place-col].getBottom()==0)
+                    .collect(Collectors.toList());
+        }
+
+        if(isTopEdge(place, col)){
+            matchingPieces = freeToUse.stream().filter(p->
+                    p.getTop()==0 && p.getLeft() + board[place-1].getRight()==0)
+                    .collect(Collectors.toList());
+        }
+
+        if(isBottomEdge(place, col)){
+            matchingPieces = freeToUse.stream().filter(p->
+                    p.getBottom()==0 && p.getLeft() + board[place-1].getRight()==0
+                            && p.getTop() + board[place - col].getBottom() == 0)
+                    .collect(Collectors.toList());
+        }
+
+        if(isPlaceNotOnEdges(place, col)){
+            matchingPieces = freeToUse.stream().filter(p->
+                    p.getLeft() + board[place-1].getRight()==0
+                            && p.getTop() + board[place - col].getBottom() == 0)
+                    .collect(Collectors.toList());
+
+        }
+
+        return matchingPieces;
     }
 
-    private List<Piece> getAllMatchingForTL(ArrayList<Piece> pieces) {
-        return pieces.stream().filter(p -> p.getLeft() == 0 && p.getTop() == 0).collect(Collectors.toList());
+    private boolean isPlaceNotOnEdges(int place, int col) {
+        return !isBLcorner(place, col) && !isTRcorner(place, col)
+                && !isBRcorner(place) && !isBottomEdge(place, col) && !isTopEdge(place, col);
     }
+
+    private boolean isBottomEdge(int place, int col) {
+        return (place>=pieces.size() - col) && !isBLcorner(place, col) && !isBRcorner(place);
+    }
+
+    private boolean isTopEdge(int place, int col) {
+        return place>0 && place < col;
+    }
+
+    private boolean isLeftEdge(int place, int col){
+        return place!=0 && (place % col==0) && !isBLcorner(place, col);
+    }
+
+    private boolean isRightEdge(int place, int col){
+        return !isTRcorner(place, col) && (place % col==col -1);
+    }
+
+    private boolean isBLcorner(int place, int col) {
+        return place == pieces.size() - col;
+    }
+
+    private boolean isTRcorner(int place, int col) {
+        return place==col - 1;
+    }
+
+    private boolean isBRcorner(int place) {
+        return place==pieces.size()-1;
+    }
+
+    private List<Piece> getAllMatchingForTL(List<Piece> pieces) {
+        return pieces.stream().filter(p->p.getLeft()==0 && p.getTop()==0).collect(Collectors.toList());
+    }
+
+
+
 }
