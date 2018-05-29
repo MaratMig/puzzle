@@ -1,19 +1,24 @@
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Scanner;
 
 public class Parser {
-    String fileName;
+    private String fileName;
+    private ArrayList<String> puzzelPiecesInput = new ArrayList<String>();
+    private ArrayList<String> inputValidationErrors = new ArrayList<String>();
+    private int numOfLines;
 
     public Parser(String fileName) {
         this.fileName = fileName;
     }
 
-    public ArrayList<String[]> parse() throws IOException{
+    public ArrayList<String> parse() throws IOException{
         File file = new File(fileName);
         ArrayList<String> lines = new ArrayList<String>();
-        ArrayList<String[]> puzzelPiecesInput = new ArrayList<String[]>();
-        int numOfLines;
+
         String temp;
         Scanner sc = null;
 
@@ -30,13 +35,14 @@ public class Parser {
             String part1 = parts[0].trim();
             numOfLines = Integer.parseInt(parts[1].trim());
 
-            //Why num of lines is a number of pieces?
             System.out.println(part1 + "^^" + numOfLines);
 
             while(it.hasNext()){
                 temp = it.next().trim();
                 if(temp.charAt(0) != '#' ){
-                    puzzelPiecesInput.add(temp.split("\\s+", 2));
+                    temp = temp.trim();
+                    temp = temp.replaceAll("\\s+","");
+                    puzzelPiecesInput.add(temp);
                 }
             }
         }
@@ -46,8 +52,25 @@ public class Parser {
         return puzzelPiecesInput;
     }
 
-    public Map<String, int[]> parsedPieces(){
-        Map<String, int[]> puzzlePieces = new HashMap<String, int[]>();
-        return puzzlePieces;
+    public Boolean checkInputValidity() {
+        int[] ids = new int[puzzelPiecesInput.size()];
+        int counter = 0;
+        if(numOfLines != puzzelPiecesInput.size()){
+            inputValidationErrors.add("Wrong number of pieces. Expected: " + numOfLines + " got: " + puzzelPiecesInput.size());
+        }
+        // print for debug purpose only
+        Iterator<String> it = puzzelPiecesInput.iterator();
+        while(it.hasNext()){
+            int temp = Integer.parseInt(it.next().substring(0,1));
+            ids[counter++] = temp;
+        }
+        System.out.println(ids[8]);
+
+//        puzzelPiecesInput.add(Integer.parseInt(temp.substring(0,1)), temp.substring(1,temp.length()-1));
+//        puzzelPiecesInput.add(temp.split("\\s+", 2));
+
+
+        System.out.println(inputValidationErrors);
+        return true;
     }
 }
