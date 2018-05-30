@@ -128,9 +128,10 @@ public class Parser {
                 }
                 puzzlePieces.add(new Piece(tempList.get(0), tempArr));
             }
-            for (Piece p: puzzlePieces) {
-                System.out.println(p.toString());
-            }
+            // TODO: remove this comment beofre 15/06/2018
+//            for (Piece p: puzzlePieces) {
+//                System.out.println(p.toString());
+//            }
             InputValidity = true;
         }
 
