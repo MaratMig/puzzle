@@ -3,25 +3,36 @@ import org.apache.commons.math3.primes.Primes;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class PuzzleBoard {
-    private int numOfLines;
-    private List<Piece> pieces ;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+public class PuzzleBoard {
+
+    List<Piece> pieces;
+    Integer numOfLines;
+    Piece[] result;
 
     public PuzzleBoard(List<Piece> pieceList, Integer numOfLines) {
         this.pieces = pieceList;
+        this.result = new Piece[pieces.size()];
         this.numOfLines = numOfLines;
     }
 
+    public Piece[] getResult() {
+        return result;
+    }
 
-    public Piece[] tryToSolvePuzzleRectangle() {
-
-        Piece[] result = new Piece[pieces.size()];
+    public boolean tryToSolvePuzzleRectangle() {
 
         int col = pieces.size() / numOfLines;
+
         //Map of piece id to all matching afterward
         Map<Integer, List<Piece>> pieceIdToHisMatches = new HashMap<>();
-        List<Piece> matchingForCurrent = getAllMatchingForTL(pieces);
+
+        List<Piece> matchingForCurrent = findFirstPieceAccordingToPuzzleForm(col);
 
         //first entry in map is assigned to key = -1 and all posible TL pieces
         pieceIdToHisMatches.put(-1, matchingForCurrent);
@@ -44,17 +55,17 @@ public class PuzzleBoard {
                 result[i] = currentPiece;
 
                 i++;
-                matchingForCurrent = findMatchingInLines(freeToUse, result, i, col);
+
+                matchingForCurrent = findPossibleMatchAccordingToPuzzleForm(col, freeToUse, i);
 
                 //keep selected piece and it's matches for future use if it will be needed to return to this step and select other matching piece.
                 pieceIdToHisMatches.put(currentPiece.getId(), matchingForCurrent);
 
             }
             if (freeToUse.isEmpty()) {
-                return result; //Puzzle is solved
+                return true; //Puzzle is solved
             } else {
                 while (matchingForCurrent.isEmpty() && i>0) {
-                    //TODO
                     //add it to free list
                     i--;
                     freeToUse.add(result[i]);
@@ -73,11 +84,103 @@ public class PuzzleBoard {
                     }
                 }
                 if (isNoAnyMatches(pieceIdToHisMatches)) {
-                    return result;
+                    return false;
                 }
             }
         }
-        return result;
+        return false;
+    }
+
+    private List<Piece> findPossibleMatchAccordingToPuzzleForm(int col, List<Piece> freeToUse, int i) {
+        List<Piece> matchingForCurrent;
+        if(col==pieces.size()){
+            matchingForCurrent = findMatchingInOneLinePuzzle(freeToUse, result, i);
+        }else if(col==1){
+            matchingForCurrent = findMatchingInOneColPuzzle(freeToUse, result, i);
+        }else{
+            matchingForCurrent = findMatchingInLines(freeToUse, result, i, col);
+        }
+        return matchingForCurrent;
+    }
+
+    private List<Piece> findFirstPieceAccordingToPuzzleForm(int col) {
+        List<Piece> matchingForCurrent;
+        if(col == pieces.size()){
+            matchingForCurrent = MatchingUtils.getAllBothTR_BR(pieces);
+        }else if(col==1){
+            matchingForCurrent = MatchingUtils.getAllBothTR_TL(pieces);
+        }else{
+            matchingForCurrent = MatchingUtils.getAllMatchingForTL(pieces);
+        }
+        return matchingForCurrent;
+    }
+
+    private List<Piece> findMatchingInOneLinePuzzle(List<Piece> freeToUse, Piece[] board, int place){
+        List<Piece> matchingPieces = new ArrayList<>();
+
+        int length = pieces.size();
+
+        if(place<length-1) {
+            matchingPieces = freeToUse.stream()
+                    .filter(p -> p.getLeft() + board[place - 1].getRight() == 0 && p.getTop() == 0 && p.getBottom() == 0)
+                    .collect(Collectors.toList());
+
+        }
+        if(place==length-1){
+            matchingPieces = freeToUse.stream().filter(p ->
+                    p.getLeft() + board[place - 1].getRight() == 0 && p.getTop() == 0 && p.getBottom() == 0 && p.getRight()==0)
+                    .collect(Collectors.toList());
+        }
+        return matchingPieces;
+    }
+
+    private List<Piece> findMatchingInOneColPuzzle(List<Piece> freeToUse, Piece[] board, int place) {
+
+        List<Piece> matchingPieces = new ArrayList<>();
+
+        int length = pieces.size();
+
+        if(place<length-1) {
+            matchingPieces = freeToUse.stream().filter(p -> p.getTop() + board[place-1].getBottom()==0 && p.getLeft()==0 && p.getRight()==0)
+                    .collect(Collectors.toList());
+
+        }
+        if(place==length-1){
+            matchingPieces = freeToUse.stream().filter(p ->
+                    p.getTop() + board[place-1].getBottom()==0 && p.getLeft()==0 && p.getRight()==0 && p.getBottom()==0)
+                    .collect(Collectors.toList());
+        }
+        return matchingPieces;
+    }
+
+    private List<Piece> findMatchingInLines(List<Piece> freeToUse, Piece[] board, int place, int col) {
+        List<Piece> matchingPieces = new ArrayList<>();
+
+        if (MatchingUtils.isTRcorner(place, col)) {
+            return MatchingUtils.findTRCorners(freeToUse, board, place, col);
+        }
+        if (MatchingUtils.isBRcorner(place, pieces.size())) {
+            return MatchingUtils.findBRCorners(freeToUse, board, place, col);
+        }
+        if (MatchingUtils.isBLcorner(place, pieces.size(), col)) {
+            return MatchingUtils.findBLCorners(freeToUse, board, place, col);
+        }
+        if (MatchingUtils.isTopEdge(place, col)) {
+            return MatchingUtils.findMatchForTopEdge(freeToUse, board, place, col);
+        }
+        if (MatchingUtils.isBottomEdge(place, pieces.size(), col)) {
+            return MatchingUtils.findMatchForBottomEdge(freeToUse, board, place, col);
+        }
+        if (MatchingUtils.isLeftEdge(place, pieces.size(), col)) {
+            return MatchingUtils.findMatchForLeftEdge(freeToUse, board, place, col);
+        }
+        if (MatchingUtils.isRightEdge(place, col)) {
+            return MatchingUtils.findMatchForRightEdge(freeToUse, board, place, col);
+        }
+        if (MatchingUtils.isPlaceNotOnEdges(place, pieces.size(), col)) {
+            return MatchingUtils.findMatchForInternalPiece(freeToUse, board, place, col);
+        }
+        return matchingPieces;
     }
 
     private boolean isNoAnyMatches(Map<Integer, List<Piece>> matchingPieces){
@@ -90,97 +193,4 @@ public class PuzzleBoard {
         }
         return true;
     }
-
-
-
-    private List<Piece> findMatching(List<Piece> freeToUse, Piece currentPiece) {
-        return freeToUse.stream().filter(p->(p.getLeft()+currentPiece.getRight())==0).collect(Collectors.toList());
-    }
-
-    private List<Piece> findMatchingInLines(List<Piece> freeToUse, Piece[] board, int place, int col){
-        List<Piece> matchingPieces = new ArrayList<>();
-
-        if(isTRcorner(place, col)){
-            matchingPieces = freeToUse.stream().filter(p->(p.getTop()==0 && p.getRight()==0 && (p.getLeft() + board[place-1].getRight())==0))
-                    .collect(Collectors.toList());
-        }
-
-        if(isBRcorner(place)){
-            matchingPieces = freeToUse.stream().filter(p->
-                    p.getBottom()==0 && p.getRight()==0 &&
-                            p.getLeft() + board[place-1].getRight()==0
-                            && p.getTop() + board[place-col].getBottom()==0)
-                    .collect(Collectors.toList());
-        }
-
-        if(isBLcorner(place, col)){
-            matchingPieces = freeToUse.stream().filter(p->
-                    p.getBottom()==0 && p.getLeft()==0 &&
-                            p.getTop() + board[place-col].getBottom()==0)
-                    .collect(Collectors.toList());
-        }
-
-        if(isTopEdge(place, col)){
-            matchingPieces = freeToUse.stream().filter(p->
-                    p.getTop()==0 && p.getLeft() + board[place-1].getRight()==0)
-                    .collect(Collectors.toList());
-        }
-
-        if(isBottomEdge(place, col)){
-            matchingPieces = freeToUse.stream().filter(p->
-                    p.getBottom()==0 && p.getLeft() + board[place-1].getRight()==0
-                            && p.getTop() + board[place - col].getBottom() == 0)
-                    .collect(Collectors.toList());
-        }
-
-        if(isPlaceNotOnEdges(place, col)){
-            matchingPieces = freeToUse.stream().filter(p->
-                    p.getLeft() + board[place-1].getRight()==0
-                            && p.getTop() + board[place - col].getBottom() == 0)
-                    .collect(Collectors.toList());
-
-        }
-
-        return matchingPieces;
-    }
-
-    private boolean isPlaceNotOnEdges(int place, int col) {
-        return !isBLcorner(place, col) && !isTRcorner(place, col)
-                && !isBRcorner(place) && !isBottomEdge(place, col) && !isTopEdge(place, col);
-    }
-
-    private boolean isBottomEdge(int place, int col) {
-        return (place>=pieces.size() - col) && !isBLcorner(place, col) && !isBRcorner(place);
-    }
-
-    private boolean isTopEdge(int place, int col) {
-        return place>0 && place < col;
-    }
-
-    private boolean isLeftEdge(int place, int col){
-        return place!=0 && (place % col==0) && !isBLcorner(place, col);
-    }
-
-    private boolean isRightEdge(int place, int col){
-        return !isTRcorner(place, col) && (place % col==col -1);
-    }
-
-    private boolean isBLcorner(int place, int col) {
-        return place == pieces.size() - col;
-    }
-
-    private boolean isTRcorner(int place, int col) {
-        return place==col - 1;
-    }
-
-    private boolean isBRcorner(int place) {
-        return place==pieces.size()-1;
-    }
-
-    private List<Piece> getAllMatchingForTL(List<Piece> pieces) {
-        return pieces.stream().filter(p->p.getLeft()==0 && p.getTop()==0).collect(Collectors.toList());
-    }
-
-
-
 }
