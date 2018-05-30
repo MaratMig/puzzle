@@ -31,7 +31,9 @@ public class PuzzleBoardTests {
         pieces.add(piece9);
 
         PuzzleBoard pboard = new PuzzleBoard(pieces,3);
-        Piece[] solution = pboard.tryToSolvePuzzleRectangle();
+        pboard.tryToSolvePuzzleRectangle();
+        Piece[] pboardResult = pboard.getResult();
+
 
 
     }
