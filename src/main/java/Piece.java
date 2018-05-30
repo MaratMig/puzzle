@@ -51,6 +51,6 @@ public class Piece {
 
     @Override
     public String toString() {
-        return "id=" + id +"(" + getLeft() + ", " + getTop()+ ", " + getRight() + ", " + getBottom()+'}';
+        return "id=" + id +"(" + getLeft() + ", " + getTop()+ ", " + getRight() + ", " + getBottom()+')';
     }
 }
