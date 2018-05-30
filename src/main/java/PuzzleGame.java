@@ -7,7 +7,6 @@ public class PuzzleGame {
 
     public PuzzleGame(String fileName) {
         this.fileName = fileName;
-
     }
 
     public void startGame() throws Exception {
@@ -19,33 +18,39 @@ public class PuzzleGame {
         }
         else {throw new Exception("validateParserOutputResult failed"); }
 
-        boolean validateBeforeSolver = validateBeforeSolver(pieceList);
+        boolean isPuzzleCanBeSolved = validateBeforeSolver(pieceList);
 
-        if (validateBeforeSolver){
-            Set<Integer> boardSize = PuzzleValidation.getPosibleNumRows(pieceList);
-            boardSize.clear();
-            boardSize.add(3);
-            for (Integer numOfLines : boardSize){
+        if (isPuzzleCanBeSolved){
+            Set<Integer> boardSize = ValidationUtils.getPosibleNumRows(pieceList);
+
+            boolean solutionFound = false;
+            for(Integer numOfLines : boardSize){
                 PuzzleBoard puzzleBoard = new PuzzleBoard(pieceList, numOfLines);
-                Piece[] solutions = puzzleBoard.tryToSolvePuzzleRectangle();
-                System.out.println(String.format("solution for %s number of lines", numOfLines));
-                printPuzzle(solutions,numOfLines);
-
+                if(puzzleBoard.tryToSolvePuzzleRectangle())
+                {
+                    Piece[] solutions = puzzleBoard.getResult();
+                    System.out.println(String.format("solution for %s lines", numOfLines));
+                    printPuzzle(solutions,numOfLines);
+                    solutionFound = true;
+                    break;
+                }
             }
-
+            if(!solutionFound){
+                System.out.println("There is no solution for current puzzle.");
+            }
         }
         else {throw new Exception("validateBeforeSolver failed");}
 
     }
 
-    public static void printPuzzle(Piece[] pieces, int col){
-
-        for(int i=0;i<pieces.length;i++){
-            System.out.print(pieces[i].toString()+" ");
-            if(i%col==col-1){
-                System.out.println();
+    public static void printPuzzle(Piece[] pieces, int numOfLines){
+        int col = pieces.length / numOfLines;
+            for (int i = 0; i < pieces.length; i++) {
+                System.out.print(pieces[i].toString() + " ");
+                if ((i % col == col - 1 && col!=1) || col==pieces.length) {
+                    System.out.println();
+                }
             }
-        }
     }
 
         private List<Piece> convertStringListToPieces(ArrayList<String> stringsList) {
@@ -110,15 +115,7 @@ public class PuzzleGame {
         return puzzlePieces;
     }
 
-    private boolean validateBeforeSolver( List<Piece>  stringList){
-        return true;
-    };
-
-
-
-
-
-
-
-
+    private boolean validateBeforeSolver(List<Piece>  pieces){
+        return ValidationUtils.isPuzzleValid(pieces);
+    }
 }
