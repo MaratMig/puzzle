@@ -1,9 +1,15 @@
+import java.awt.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 public class PuzzleGame {
-    String fileName;
-    Parser parser;
+    private String fileName;
+    private Parser parser;
+
+
+
+    private static List<String> exceptionCollection = new ArrayList<>();
 
 
     public PuzzleGame(String fileName) {
@@ -13,7 +19,7 @@ public class PuzzleGame {
 
     public void startGame() throws Exception {
         ArrayList<Piece> puzzlePieces = startParser();
-        if (!puzzlePieces.isEmpty()) {
+        if (puzzlePieces!=null) {
             boolean isPuzzleCanBeSolved = validateBeforeSolver(puzzlePieces);
             if (isPuzzleCanBeSolved) {
                 Set<Integer> boardSize = ValidationUtils.getPosibleNumRows(puzzlePieces);
@@ -22,31 +28,44 @@ public class PuzzleGame {
                     PuzzleBoard puzzleBoard = new PuzzleBoard(puzzlePieces, numOfLines);
                     if (puzzleBoard.tryToSolvePuzzleRectangle()) {
                         Piece[] solutions = puzzleBoard.getResult();
-                        System.out.println(String.format("solution for %s lines", numOfLines));
+
                         printPuzzle(solutions, numOfLines);
                         solutionFound = true;
                         break;
                     }
                 }
             }
+            else {
+                printExceptionCollection();
+            }
         }else {
                 printErrorsFromParser();
             }
     }
 
-    private void printErrorsFromParser() {
+    private void printErrorsFromParser() throws IOException {
         ArrayList<String> inputValidationErrors = parser.getInputValidationErrors();
-        inputValidationErrors.stream().forEach(System.out::println);
+        StringBuilder outPut = new StringBuilder();
+        inputValidationErrors.stream().forEach(e -> {
+            outPut.append(e);
+            System.out.println(e);
+        });
+        OutputFile.writeResultToFile(outPut.toString());
     }
 
-    public static void printPuzzle(Piece[] pieces, int numOfLines) {
+    public static void printPuzzle(Piece[] pieces, int numOfLines) throws IOException {
+        StringBuffer outPut = new StringBuffer();
+        outPut.append(String.format("Solution for %s lines:", numOfLines));
+        outPut.append("\n\n");
         int col = pieces.length / numOfLines;
         for (int i = 0; i < pieces.length; i++) {
-            System.out.print(pieces[i].toString() + " ");
+            outPut.append(pieces[i].toString() + " ");
             if ((i % col == col - 1 && col != 1) || col == pieces.length) {
-                System.out.println();
+                outPut.append("\n");
             }
         }
+        System.out.println(outPut.toString());
+        OutputFile.writeResultToFile(outPut.toString());
     }
 
     private List<Piece> convertStringListToPieces(ArrayList<String> stringsList) {
@@ -104,4 +123,20 @@ public class PuzzleGame {
     private boolean validateBeforeSolver(List<Piece> pieces) {
         return ValidationUtils.isPuzzleValid(pieces);
     }
+
+    public static void addException(String s) {
+        exceptionCollection.add(s);
+    }
+
+    public static void  printExceptionCollection() throws IOException {
+        StringBuilder outPut = new StringBuilder();
+        exceptionCollection.stream().forEach(e -> {
+                                                    outPut.append(e);
+                                                    System.out.println(e);
+                                                });
+        OutputFile.writeResultToFile(outPut.toString());
+
+    }
+
+
 }

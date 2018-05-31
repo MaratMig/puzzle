@@ -128,13 +128,13 @@ public class Parser {
                 }
                 puzzlePieces.add(new Piece(tempList.get(0), tempArr));
             }
-            // TODO: remove this comment beofre 15/06/2018
+            // TODO: remove this comment before 15/06/2018
 //            for (Piece p: puzzlePieces) {
 //                System.out.println(p.toString());
 //            }
             InputValidity = true;
         }
-
+            // TODO: remove this comment before 15/06/2018
 //        Collections.sort(correctElementIDs);
 //        System.out.println("==============");
 //        System.out.println(correctElementIDs.toString());
@@ -143,7 +143,7 @@ public class Parser {
 //        System.out.println(correctElementIDs);
 //        System.out.println(wrongElementIDs);
 //        System.out.println(missingElementIDs);
-        System.out.println(inputValidationErrors);
+//        System.out.println(inputValidationErrors);
         return InputValidity;
     }
 
