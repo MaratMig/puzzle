@@ -1,3 +1,5 @@
+package com.puzzle.fileHandlers;
+
 import java.io.*;
 
 public class OutputFile {

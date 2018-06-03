@@ -1,9 +1,14 @@
+package com.puzzle;
+
+import com.puzzle.fileHandlers.OutputFile;
+import com.puzzle.fileHandlers.Parser;
+import com.puzzle.utils.ValidationUtils;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-public class PuzzleGame {
+public class PuzzleGameManager {
     private String fileName;
     private Parser parser;
     private Map<String, Boolean> resultCollector = new HashMap<>();
@@ -12,7 +17,7 @@ public class PuzzleGame {
     private static List<String> exceptionCollection = new ArrayList<>();
 
 
-    public PuzzleGame(String fileName) {
+    public PuzzleGameManager(String fileName) {
         this.fileName = fileName;
 
     }
@@ -25,9 +30,9 @@ public class PuzzleGame {
                 Set<Integer> boardSize = ValidationUtils.getPosibleNumRows(puzzlePieces);
                 boolean solutionFound = false;
                 for (Integer numOfLines : boardSize) {
-                    PuzzleBoard puzzleBoard = new PuzzleBoard(puzzlePieces, numOfLines);
-                    if (puzzleBoard.tryToSolvePuzzleRectangle()) {
-                        Piece[] solutions = puzzleBoard.getResult();
+                    PuzzleSolver puzzleSolver = new PuzzleSolver(puzzlePieces, numOfLines);
+                    if (puzzleSolver.tryToSolvePuzzleRectangle()) {
+                        Piece[] solutions = puzzleSolver.getResult();
 
                         printPuzzle(solutions, numOfLines);
                         solutionFound = true;
@@ -60,12 +65,12 @@ public class PuzzleGame {
                         new Thread("Thread work on " + numOfLines.toString() + " lines solution is"){
                             public void run(){
 
-                                PuzzleBoard puzzleBoard = new PuzzleBoard(puzzlePieces, numOfLines);
-                                boolean result = puzzleBoard.tryToSolvePuzzleRectangle();
+                                PuzzleSolver puzzleSolver = new PuzzleSolver(puzzlePieces, numOfLines);
+                                boolean result = puzzleSolver.tryToSolvePuzzleRectangle();
                                 addResultToCollector(Thread.currentThread().getName(), result);
 
                                 if (result) {
-                                    Piece[] solutions = puzzleBoard.getResult();
+                                    Piece[] solutions = puzzleSolver.getResult();
                                     solutionFound[0] =true;
                                     try {
                                         printPuzzle(solutions, numOfLines);

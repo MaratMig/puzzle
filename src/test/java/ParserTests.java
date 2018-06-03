@@ -1,3 +1,5 @@
+import com.puzzle.fileHandlers.Parser;
+import com.puzzle.Piece;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -17,6 +19,7 @@ private static final String resourceDir= ("src/test/resources/filesToParse/");
         ArrayList<Piece> parseList = parse.parse();
         assertNull(parseList);
         ArrayList<String> inputValidationErrors = parse.getInputValidationErrors();
+        inputValidationErrors.contains("errror");
         inputValidationErrors.get(0).equals("");
 
     }

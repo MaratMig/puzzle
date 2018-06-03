@@ -1,3 +1,7 @@
+package com.puzzle.fileHandlers;
+
+import com.puzzle.Piece;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

@@ -1,11 +1,9 @@
+import com.puzzle.PuzzleGameManager;
 import org.junit.Test;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 import static org.junit.Assert.assertTrue;
 
-public class PuzzleGameTests {
+public class PuzzleGameManagerTests {
 
 
 
@@ -13,7 +11,7 @@ public class PuzzleGameTests {
 
     @Test
     public void dashAfterPieceDetails() throws Exception {
-        PuzzleGame game = new PuzzleGame(resourceDir + "9elements.txt");
+        PuzzleGameManager game = new PuzzleGameManager(resourceDir + "9elements.txt");
         game.startGame();
 
     }
