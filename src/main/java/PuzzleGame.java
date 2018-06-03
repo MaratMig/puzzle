@@ -1,4 +1,4 @@
-import java.awt.*;
+
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 public class PuzzleGame {
     private String fileName;
     private Parser parser;
-
+    private Map<String, Boolean> resultCollector = new HashMap<>();
 
 
     private static List<String> exceptionCollection = new ArrayList<>();
@@ -42,6 +42,57 @@ public class PuzzleGame {
                 printErrorsFromParser();
             }
     }
+
+
+    public void startGame2() throws Exception {
+        ArrayList<Piece> puzzlePieces = startParser();
+        if (puzzlePieces!=null) {
+            boolean isPuzzleCanBeSolved = validateBeforeSolver(puzzlePieces);
+            if (isPuzzleCanBeSolved) {
+                Set<Integer> boardSize = ValidationUtils.getPosibleNumRows(puzzlePieces);
+//                boolean solutionFound = false;
+
+                final boolean[] solutionFound = {false};
+                for (Integer numOfLines : boardSize) {
+
+                    if(solutionFound[0]) {break;}
+
+                        new Thread("Thread work on " + numOfLines.toString() + " lines solution is"){
+                            public void run(){
+
+                                PuzzleBoard puzzleBoard = new PuzzleBoard(puzzlePieces, numOfLines);
+                                boolean result = puzzleBoard.tryToSolvePuzzleRectangle();
+                                addResultToCollector(Thread.currentThread().getName(), result);
+
+                                if (result) {
+                                    Piece[] solutions = puzzleBoard.getResult();
+                                    solutionFound[0] =true;
+                                    try {
+                                        printPuzzle(solutions, numOfLines);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                System.out.println("Thread: " + getName() + " running");
+                            }
+                        }.start();
+                }
+            }
+
+            else {
+                printExceptionCollection();
+            }
+        }else {
+            printErrorsFromParser();
+        }
+    }
+
+    private void addResultToCollector(String s, boolean b) {
+
+        resultCollector.put(s, b);
+
+    }
+
 
     private void printErrorsFromParser() throws IOException {
         ArrayList<String> inputValidationErrors = parser.getInputValidationErrors();

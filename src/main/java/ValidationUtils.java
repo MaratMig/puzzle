@@ -1,5 +1,4 @@
 import org.apache.commons.math3.primes.Primes;
-import org.apache.commons.math3.primes.Primes;
 
 import java.util.ArrayList;
 import java.util.HashSet;
