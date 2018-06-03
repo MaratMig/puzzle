@@ -1,16 +1,20 @@
+package com.puzzle;
+
+import com.puzzle.utils.MatchingUtils;
+
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PuzzleBoard {
+public class PuzzleSolver {
 
     List<Piece> pieces;
     Integer numOfLines;
     Piece[] result;
 
-    public PuzzleBoard(List<Piece> pieceList, Integer numOfLines) {
+    public PuzzleSolver(List<Piece> pieceList, Integer numOfLines) {
         this.pieces = pieceList;
         this.result = new Piece[pieces.size()];
         this.numOfLines = numOfLines;

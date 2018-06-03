@@ -1,8 +1,10 @@
+import com.puzzle.Piece;
+import com.puzzle.PuzzleSolver;
 import org.junit.Test;
 
 import java.util.ArrayList;
 
-public class PuzzleBoardTests {
+public class PuzzleSolverTests {
 
     @Test
     public void testSolver(){
@@ -30,7 +32,7 @@ public class PuzzleBoardTests {
         pieces.add(piece8);
         pieces.add(piece9);
 
-        PuzzleBoard pboard = new PuzzleBoard(pieces,3);
+        PuzzleSolver pboard = new PuzzleSolver(pieces,3);
         pboard.tryToSolvePuzzleRectangle();
         Piece[] pboardResult = pboard.getResult();
 

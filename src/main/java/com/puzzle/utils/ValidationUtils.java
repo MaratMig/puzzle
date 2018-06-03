@@ -1,3 +1,8 @@
+package com.puzzle.utils;
+
+import com.puzzle.Corner;
+import com.puzzle.Piece;
+import com.puzzle.PuzzleGameManager;
 import org.apache.commons.math3.primes.Primes;
 
 import java.util.ArrayList;
@@ -94,18 +99,18 @@ public class ValidationUtils {
         boolean result = true;
         if (!isTotalSumZero(pieces)) {
 
-            PuzzleGame.addException("Puzzle can't be solved, total sum of edges isn't zero");
+            PuzzleGameManager.addException("Puzzle can't be solved, total sum of edges isn't zero");
 //            System.out.println("Puzzle can't be solved, total sum of edges isn't zero");
             result = false;
         }
         if (!isValidNumberOfStraitSides(pieces)) {
-            PuzzleGame.addException("Puzzle can't be solved, wrong number of strait edge");
+            PuzzleGameManager.addException("Puzzle can't be solved, wrong number of strait edge");
 //            System.out.println("Puzzle can't be solved, wrong number of strait edges");
             result = false;
         }
         List<Corner> missingCorners = findMissingCorners(pieces);
         if (!missingCorners.isEmpty()) {
-            PuzzleGame.addException("Puzzle can't be solved, there are missing corners: ");
+            PuzzleGameManager.addException("Puzzle can't be solved, there are missing corners: ");
 //            System.out.println("Puzzle can't be solved, there are missing corners: ");
             for (Corner corner : missingCorners) {
                 System.out.println(corner.name());

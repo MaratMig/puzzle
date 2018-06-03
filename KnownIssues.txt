@@ -4,15 +4,14 @@ Pre-defined file is used as an input and console is used for the output.
 
 Known issues
 Missing features
-1.	Output file isn't supported.
+1.	Parser functional is under construction - missing error aggregation
 2.	There is no ability to summarize errors during validation/solving process.
-3.	Several input file validations aren't supported.
+3.	Several input file validations aren't supported. 
 4.	Possible validations for number of strait sides isn’t supported (program tries to solve puzzle in case of number of lines that can be eliminated before).
-5.	Missing method for solution verification.
-6.	Algorithm doesn't support big (>45) amount of pieces.
-7.	Missing input configurability
+5.	Algorithm doesn't support big (>45) amount of pieces.
+
 Known issues in design
 1.	There is a lack in generic algorithm logic: puzzles of 1 line and 1 column are treated separately.
 2.	Missing unit tests.
-3.	Puzzle game class contains parser methods (will be refactored in the future).
-4.	Clean up code: naming convention, need to reorganize classes to packages
+
+
