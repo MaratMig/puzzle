@@ -98,22 +98,26 @@ public class ValidationUtils {
 
         boolean result = true;
         if (!isTotalSumZero(pieces)) {
-
-            PuzzleGameManager.addException("Puzzle can't be solved, total sum of edges isn't zero");
+            ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.SUM_NOT_ZERO);
+            PuzzleGameManager.addException(error.getError());
 //            System.out.println("Puzzle can't be solved, total sum of edges isn't zero");
             result = false;
         }
         if (!isValidNumberOfStraitSides(pieces)) {
-            PuzzleGameManager.addException("Puzzle can't be solved, wrong number of strait edge");
+            ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.WRONG_NUM_STRAIGHTS);
+            PuzzleGameManager.addException(error.getError());
 //            System.out.println("Puzzle can't be solved, wrong number of strait edges");
             result = false;
         }
         List<Corner> missingCorners = findMissingCorners(pieces);
         if (!missingCorners.isEmpty()) {
-            PuzzleGameManager.addException("Puzzle can't be solved, there are missing corners: ");
+
+//            PuzzleGameManager.addException("Puzzle can't be solved, there are missing corners: ");
 //            System.out.println("Puzzle can't be solved, there are missing corners: ");
             for (Corner corner : missingCorners) {
-                System.out.println(corner.name());
+                ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.MISSING_CORNER, corner.name());
+                PuzzleGameManager.addException(error.getError());
+//                System.out.println(corner.name());
             }
             result = false;
         }

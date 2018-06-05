@@ -49,48 +49,7 @@ public class PuzzleGameManager {
     }
 
 
-    public void startGame2() throws Exception {
-        ArrayList<Piece> puzzlePieces = startParser();
-        if (puzzlePieces!=null) {
-            boolean isPuzzleCanBeSolved = validateBeforeSolver(puzzlePieces);
-            if (isPuzzleCanBeSolved) {
-                Set<Integer> boardSize = ValidationUtils.getPosibleNumRows(puzzlePieces);
-//                boolean solutionFound = false;
 
-                final boolean[] solutionFound = {false};
-                for (Integer numOfLines : boardSize) {
-
-                    if(solutionFound[0]) {break;}
-
-                        new Thread("Thread work on " + numOfLines.toString() + " lines solution is"){
-                            public void run(){
-
-                                PuzzleSolver puzzleSolver = new PuzzleSolver(puzzlePieces, numOfLines);
-                                boolean result = puzzleSolver.tryToSolvePuzzleRectangle();
-                                addResultToCollector(Thread.currentThread().getName(), result);
-
-                                if (result) {
-                                    Piece[] solutions = puzzleSolver.getResult();
-                                    solutionFound[0] =true;
-                                    try {
-                                        printPuzzle(solutions, numOfLines);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                                System.out.println("Thread: " + getName() + " running");
-                            }
-                        }.start();
-                }
-            }
-
-            else {
-                printExceptionCollection();
-            }
-        }else {
-            printErrorsFromParser();
-        }
-    }
 
     private void addResultToCollector(String s, boolean b) {
 
