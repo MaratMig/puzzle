@@ -1,29 +1,54 @@
 package com.puzzle.fileHandlers;
 
 import java.io.*;
+import java.nio.file.Path;
 
 public class OutputFile {
 
-    private static final String fileName = "outputFile.txt";
-    private static final String path = "src\\main\\resources\\";
+    private Path outPutPath;
+    private String fileName;
+
+    public OutputFile(Path outPutPath) {
+        this.outPutPath = outPutPath;
+        createOutputFolder();
+    }
+
+    private void createOutputFolder() {
+        Path outputFolder = outPutPath.getParent().resolve("output");
+        File directory = new File(String.valueOf(outputFolder));
+        if (! directory.exists()){
+            directory.mkdir();
+        }
+
+    }
 
 
-
-
-
-    public static void writeResultToFile(String str) throws IOException {
+    public void writeResultToFile(Path fileName, String str)  {
 
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream(path + fileName);
-            try (OutputStreamWriter writer = new OutputStreamWriter(fos)) {
-                writer.write(str);
+            String output = fileName.getFileName().toString().replace(".txt",".output");
+            fos = new FileOutputStream(outPutPath.resolve(output).toString());
+            try {
+                try (OutputStreamWriter writer = new OutputStreamWriter(fos)) {
+                    try {
+                        writer.write(str);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
         } catch (FileNotFoundException e) {
             System.out.println("Can't create file");
         } finally {
-            fos.close();
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
 

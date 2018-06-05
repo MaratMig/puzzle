@@ -1,7 +1,8 @@
 import com.puzzle.PuzzleGameManager;
 import org.junit.Test;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-import static org.junit.Assert.assertTrue;
 
 public class PuzzleGameManagerTests {
 
@@ -11,7 +12,8 @@ public class PuzzleGameManagerTests {
 
     @Test
     public void dashAfterPieceDetails() throws Exception {
-        PuzzleGameManager game = new PuzzleGameManager(resourceDir + "9elements.txt");
+        Path path = Paths.get(resourceDir + "9elements.txt");
+        PuzzleGameManager game = new PuzzleGameManager(path);
         game.startGame();
 
     }

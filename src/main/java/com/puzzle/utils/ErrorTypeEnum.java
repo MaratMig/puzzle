@@ -7,6 +7,8 @@ public enum ErrorTypeEnum {
     MISSING_CORNER("Cannot solve puzzle: missing corner element:%s"),
     WRONG_NUM_STRAIGHTS("Cannot solve puzzle: wrong number of straight edges"),
     SUM_NOT_ZERO("Cannot solve puzzle: sum of edges is not zero"),
+    SUM_LR_NOT_ZERO("Cannot solve puzzle: sum of Right and Left edges is not zero"),
+    SUM_TB_NOT_ZERO("Cannot solve puzzle: sum of Top and Bottom edges is not zero"),
     NO_SOLUTION("Cannot solve puzzle: it seems that there is no proper solution");
 
 
