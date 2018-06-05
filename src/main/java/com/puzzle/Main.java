@@ -1,9 +1,12 @@
 package com.puzzle;
 
+import com.puzzle.fileHandlers.FileManager;
+
+import java.nio.file.Path;
+
 public class Main {
 
-    private static String inputFile = null;
-    private static String outputFile = null;
+    private static String inputPath = null;
 
     public static void main(String[] args) throws Exception {
 
@@ -17,26 +20,17 @@ public class Main {
         //TODO: In production version should not use default
         // input and output files should entered from command line
 
-        setInputFile("src\\main\\resources\\inputFile.txt");
-        setOutputFile("src\\main\\resources\\outputFile.txt");
+        setInputPath("src\\main\\resources\\inputFiles");
 
-        PuzzleGameManager game = new PuzzleGameManager(inputFile);
-        game.startGame();
+        FileManager fileManager = new FileManager();
+        fileManager.startGames(getInputPath());
     }
 
-    public static String getInputFile() {
-        return inputFile;
+    public static String getInputPath() {
+        return inputPath;
     }
 
-    public static void setInputFile(String inputFile) {
-        Main.inputFile = inputFile;
-    }
-
-    public static String getOutputFile() {
-        return outputFile;
-    }
-
-    public static void setOutputFile(String outputFile) {
-        Main.outputFile = outputFile;
+    public static void setInputPath(String inputPath) {
+        Main.inputPath = inputPath;
     }
 }

@@ -5,10 +5,11 @@ import com.puzzle.Piece;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 
 public class Parser {
-    private String fileName;
+    private Path fileName;
     private ArrayList<String[]> puzzelPiecesInput = new ArrayList<>();
     private ArrayList<Integer[]> puzzelPiecesInputInteger = new ArrayList<>();
 
@@ -22,15 +23,15 @@ public class Parser {
     private String fileHeader;
     private Boolean InputValidity = false;
 
-    public Parser(String fileName) {
+    public Parser(Path fileName) {
         this.fileName = fileName;
     }
 
-    public ArrayList<Piece> parse() throws IOException{
+    public ArrayList<Piece> parse() {
         Scanner sc = null;
         ArrayList<String> lines = new ArrayList<>();
         String[] parts;
-        File file = new File(fileName);
+        File file = new File(fileName.toFile().toString());
 
         try {
             sc = new Scanner(file);

@@ -5,3 +5,4 @@
 /.idea/*
 /target/*
 /src/main/resources/outputFile.txt
+/src/main/resources/inputFiles/output/*
