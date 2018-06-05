@@ -83,4 +83,56 @@ public class TestingUtils {
     public List<Piece> getTestedBottomEdges() {
         return testedBottomEdges;
     }
+
+    public boolean isPuzzleSolved(Piece[] pieces, int numOfLines){
+        boolean isSolved = true;
+
+        Piece[][] result = convertPiecesTo2DimentialArr(pieces, numOfLines);
+        int numOfColumns = pieces.length/numOfLines;
+
+        for (int i = 1; i <= numOfLines; i++) {
+            for (int j = 1; j <= numOfColumns; j++) {
+                if(result[i][j].getTop()+ result[i-1][j].getBottom()!=0){
+                    isSolved = false;
+                }
+                if(result[i][j].getLeft()+ result[i][j-1].getRight()!=0){
+                    isSolved = false;
+                }
+                if(i==numOfLines){
+                    if(result[i][j].getBottom()!=0){
+                        isSolved = false;
+                    }
+                }
+                if(j==numOfColumns){
+                    if(result[i][j].getRight()!=0){
+                        isSolved = false;
+                    }
+                }
+            }
+        }
+        return isSolved;
+    }
+
+    //method converts one demential array of pieces to 2D array; First line and first column will contain pieces with all strait edges.
+    private Piece[][] convertPiecesTo2DimentialArr(Piece[] pieces, int numOfLines) {
+        Piece defaultPiece = new Piece(0, new int[]{0, 0, 0, 0});
+
+        int numOfcol = pieces.length/numOfLines;
+
+        Piece[][] puzzlePieces = new Piece[numOfLines+1][numOfcol+1];
+
+        for(int j=0; j <= numOfcol; j++){
+            puzzlePieces[0][j] = defaultPiece;
+        }
+        for(int i=0; i <= numOfLines; i++){
+            puzzlePieces[i][0] = defaultPiece;
+        }
+
+        int place = 0;
+        while(place < pieces.length){
+            puzzlePieces[place / numOfcol + 1][place%numOfcol + 1] = pieces[place];
+            place++;
+        }
+        return puzzlePieces;
+    }
 }

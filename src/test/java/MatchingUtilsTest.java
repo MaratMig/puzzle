@@ -1,5 +1,7 @@
-import com.puzzle.utils.MatchingUtils;
 import com.puzzle.Piece;
+import com.puzzle.utils.MatchingUtils;
+import org.junit.BeforeClass;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -35,23 +37,15 @@ class MatchingUtilsTest {
         testingUtils.getTestedTLcorners().stream().forEach(piece -> assertTrue(actualTLCorners.contains(piece)));
     }
 
-    //Can be parametrized
-    @Test
-    void isPlaceNotOnEdges() {
-        assertTrue(MatchingUtils.isPlaceNotOnEdges(5, 9, 3));
-    }
-
     //0 1 2 3
     //4 5 6 7
     //8 9 10 11
-    //place = 3, col = 4;
+    //numOfPieces = 12, col = 4;
+    @Test
+    void isPlaceNotOnEdges() {
+        assertTrue(MatchingUtils.isPlaceNotOnEdges(5, 12, 4));
+    }
 
-   /* @ParameterizedTest
-    @CsvSource({ "foo, 1", "bar, 2", "'baz, qux', 3" })
-    void testWithCsvSource(String first, int second) {
-        assertNotNull(first);
-        assertNotEquals(0, second);
-    }*/
     @ParameterizedTest
     @CsvSource({"9, 12, 4","10, 12, 4"})
     void isBottomEdge(int place, int numOfPieces, int numOfColumns) {
@@ -59,13 +53,9 @@ class MatchingUtilsTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"1, 12, 4","2, 12, 4"})
-    void isTopEdge(int place, int numOfPieces, int numOfColumns) {
-        assertTrue(MatchingUtils.isBottomEdge(place, numOfPieces, numOfColumns));
-    }
-
-    @Test
-    void isLeftEdge() {
+    @CsvSource({"1, 4","2, 4"})
+    void isTopEdge(int place, int numOfColumns) {
+        assertTrue(MatchingUtils.isTopEdge(place, numOfColumns));
     }
 
     //0  1  2  3
@@ -75,29 +65,51 @@ class MatchingUtilsTest {
     @ParameterizedTest
     @CsvSource({"4, 16, 4","8, 16, 4"})
     void isLeftEdge(int place, int numOfPieces, int numOfColumns) {
-        assertTrue(MatchingUtils.isBottomEdge(place, numOfPieces, numOfColumns));
+        assertTrue(MatchingUtils.isLeftEdge(place, numOfPieces, numOfColumns));
     }
 
-    @Test
-    void isRightEdge() {
-
+    @ParameterizedTest
+    @CsvSource({"7, 16, 4","11, 16, 4"})
+    void isRightEdge(int place, int numOfLines, int col) {
+        assertTrue(MatchingUtils.isRightEdge(place, numOfLines, col));
     }
 
-    @Test
-    void isBLcorner() {
+    @ParameterizedTest
+    @CsvSource({"15, 16, 4","3, 16, 4"})
+    void rightCornerIsNotRecognizedAsRightEdge(int place, int numOfPieces, int numOfColumns) {
+        assertFalse(MatchingUtils.isRightEdge(place, numOfPieces, numOfColumns));
     }
 
-    @Test
-    void isTRcorner() {
+    @ParameterizedTest
+    @CsvSource({"12, 16, 4","6, 9, 3"})
+    void isBLcorner(int place, int numOfLines, int col) {
+        assertTrue(MatchingUtils.isBLcorner(place, numOfLines, col));
     }
 
-    @Test
-    void isBRcorner() {
+    @ParameterizedTest
+    @CsvSource({"1, 16, 4","1, 9, 3"})
+    void isBLcornerNegative(int place, int numOfLines, int col) {
+        assertFalse(MatchingUtils.isBLcorner(place, numOfLines, col));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"3, 4","2, 3"})
+    void isTRcorner(int place, int col) {
+        assertTrue(MatchingUtils.isTRcorner(place, col));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"15, 16","8, 9"})
+    void isBRcorner(int place, int numOfPieces) {
+        assertTrue(MatchingUtils.isTRcorner(place, numOfPieces));
     }
 
     @Test
     void findTRCorners() {
+        //List<Piece> actualTRCorners = MatchingUtils.findTRCorners(testedPieces);
 
+        //assertEquals(testingUtils.getTestedTLcorners().size(), actualTLCorners.size());
+        //testingUtils.getTestedTLcorners().stream().forEach(piece -> assertTrue(actualTLCorners.contains(piece)));
     }
 
     @Test
@@ -127,5 +139,4 @@ class MatchingUtilsTest {
     @Test
     void findMatchForInternalPiece() {
     }
-
 }

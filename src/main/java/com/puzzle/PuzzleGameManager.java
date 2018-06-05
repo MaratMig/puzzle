@@ -2,7 +2,6 @@ package com.puzzle;
 
 import com.puzzle.fileHandlers.OutputFile;
 import com.puzzle.fileHandlers.Parser;
-import com.puzzle.utils.ValidationUtils;
 
 import java.io.IOException;
 import java.util.*;
@@ -25,9 +24,11 @@ public class PuzzleGameManager {
     public void startGame() throws Exception {
         ArrayList<Piece> puzzlePieces = startParser();
         if (puzzlePieces!=null) {
-            boolean isPuzzleCanBeSolved = validateBeforeSolver(puzzlePieces);
+            //boolean isPuzzleCanBeSolved = validateBeforeSolver(puzzlePieces);
+            PuzzleValidator puzzleValidator = new PuzzleValidator(puzzlePieces);
+            boolean isPuzzleCanBeSolved = puzzleValidator.isPuzzleValid();
             if (isPuzzleCanBeSolved) {
-                Set<Integer> boardSize = ValidationUtils.getPosibleNumRows(puzzlePieces);
+                Set<Integer> boardSize = puzzleValidator.getValidNumOfRows();
                 boolean solutionFound = false;
                 for (Integer numOfLines : boardSize) {
                     PuzzleSolver puzzleSolver = new PuzzleSolver(puzzlePieces, numOfLines);
@@ -135,10 +136,10 @@ public class PuzzleGameManager {
         return puzzlePieces;
     }
 
-    private boolean validateBeforeSolver(List<Piece> pieces) {
+    /*private boolean validateBeforeSolver(List<Piece> pieces) {
         return ValidationUtils.isPuzzleValid(pieces);
     }
-
+*/
     public static void addException(String s) {
         exceptionCollection.add(s);
     }

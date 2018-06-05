@@ -23,7 +23,7 @@ public class MatchingUtils {
         return !isBLcorner(place, numOfPieces, col) && !isTRcorner(place, col)
                 && !isBRcorner(place, numOfPieces) && !isBottomEdge(place, numOfPieces, col)
                 && !isTopEdge(place, col) && !isLeftEdge(place, numOfPieces, col)
-                && !isRightEdge(place, col);
+                && !isRightEdge(place, numOfPieces, col);
     }
 
     public static boolean isBottomEdge(int place, int numOfPieces, int col) {
@@ -38,8 +38,8 @@ public class MatchingUtils {
         return place!=0 && (place % col==0) && !isBLcorner(place, numOfPieces, col);
     }
 
-    public static boolean isRightEdge(int place, int col){
-        return !isTRcorner(place, col) && (place % col==col -1);
+    public static boolean isRightEdge(int place, int numOfPieces, int col){
+        return !isTRcorner(place, col) && (place % col==col -1) && !isBRcorner(place, numOfPieces);
     }
 
     public static boolean isBLcorner(int place, int numOfPieces, int col) {
