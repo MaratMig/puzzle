@@ -173,7 +173,7 @@ public class PuzzleSolver {
         if (MatchingUtils.isLeftEdge(place, pieces.size(), col)) {
             return MatchingUtils.findMatchForLeftEdge(freeToUse, board, place, col);
         }
-        if (MatchingUtils.isRightEdge(place, col)) {
+        if (MatchingUtils.isRightEdge(place, pieces.size(), col)) {
             return MatchingUtils.findMatchForRightEdge(freeToUse, board, place, col);
         }
         if (MatchingUtils.isPlaceNotOnEdges(place, pieces.size(), col)) {

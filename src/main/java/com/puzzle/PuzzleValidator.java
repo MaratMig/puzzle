@@ -1,22 +1,43 @@
-package com.puzzle.utils;
+package com.puzzle;
 
-import com.puzzle.Corner;
-import com.puzzle.Piece;
-import com.puzzle.PuzzleGameManager;
+
+import com.puzzle.utils.ErrorBuilder;
+import com.puzzle.utils.ErrorTypeEnum;
 import org.apache.commons.math3.primes.Primes;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ValidationUtils {
+public class PuzzleValidator {
 
-    public static Set<Integer> getPosibleNumRows(List<Piece> pieces) {
+    private List<Piece> pieces;
+
+    public PuzzleValidator(List<Piece> pieces) {
+        this.pieces = pieces;
+    }
+
+    public Set<Integer> getValidNumOfRows() {
+        Set<Integer> possibleNumOfLines = getPosibleNumRows();
+        Set<Integer> numOfLinesAfterElimination = new HashSet<>();
+
+        for (int numOfLines : possibleNumOfLines) {
+            int numOfCol = pieces.size() / numOfLines;
+
+            if (getNumOfStraitTopEdges() >= numOfCol && getNumOfStraitBottomEdges() >= numOfCol
+                    && getNumOfStraitRightEdges() >= numOfLines && getNumOfStraitLeftEdges() >= numOfLines) {
+                numOfLinesAfterElimination.add(numOfLines);
+            }
+        }
+        return numOfLinesAfterElimination;
+    }
+
+    private Set<Integer> getPosibleNumRows() {
+
         int numOfPieces = pieces.size();
         Set<Integer> possibleNumberOfLines = new HashSet<>();
-        possibleNumberOfLines.add(1);
 
+        possibleNumberOfLines.add(1);
         List<Integer> factors = new ArrayList<>();
         factors.addAll(Primes.primeFactors(numOfPieces));
 
@@ -30,15 +51,33 @@ public class ValidationUtils {
         return possibleNumberOfLines;
     }
 
-    private static boolean isTotalSumZero(List<Piece> pieces) {
+    private long getNumOfStraitRightEdges() {
+        return pieces.stream().filter(p -> p.getRight() == 0).count();
+    }
+
+    private long getNumOfStraitLeftEdges() {
+        return pieces.stream().filter(p -> p.getLeft() == 0).count();
+    }
+
+    private long getNumOfStraitTopEdges() {
+        return pieces.stream().filter(p -> p.getTop() == 0).count();
+    }
+
+    private long getNumOfStraitBottomEdges() {
+        return pieces.stream().filter(p -> p.getBottom() == 0).count();
+    }
+
+    private boolean isTotalSumZero() {
         int sum = 0;
         for (Piece piece : pieces) {
             sum += piece.getSum();
         }
+
         return sum == 0;
     }
 
-    private static List<Corner> findMissingCorners(List<Piece> pieces) {
+    public List<Corner> findMissingCorners() {
+
         List<Corner> missingCorners = new ArrayList<>();
 
         boolean isTLCornerExist = false;
@@ -47,7 +86,6 @@ public class ValidationUtils {
         boolean isBRCornerExist = false;
 
         for (Piece piece : pieces) {
-
             if (piece.getLeft() == 0 && piece.getTop() == 0) {
                 isTLCornerExist = true;
                 continue;
@@ -82,45 +120,72 @@ public class ValidationUtils {
         return missingCorners;
     }
 
+
     //Number of top and bottom strait sides should be equal;
     //Number of left and right strait sides should be equal;
-    private static boolean isValidNumberOfStraitSides(List<Piece> pieces) {
+
+    private boolean isValidNumberOfStraitSides() {
+
         long numOfStraitLeft = pieces.stream().filter(p -> p.getLeft() == 0).count();
         long numOfStraitRight = pieces.stream().filter(p -> p.getRight() == 0).count();
-
         long numOfStraitTop = pieces.stream().filter(p -> p.getTop() == 0).count();
         long numOfStraitBottom = pieces.stream().filter(p -> p.getBottom() == 0).count();
 
         return (numOfStraitLeft == numOfStraitRight) && (numOfStraitTop == numOfStraitBottom);
+
     }
 
-    public static boolean isPuzzleValid(List<Piece> pieces) {
+    private boolean isSumOfRightAndLeftSidesZero() {
+
+        int sumOfRight = pieces.stream().mapToInt(Piece::getRight).sum();
+        int sumOfLeft = pieces.stream().mapToInt(Piece::getLeft).sum();
+
+        return sumOfLeft + sumOfRight == 0;
+    }
+
+
+    private boolean isSumOfTopAndBottomSidesZero() {
+
+        int sumOfTop = pieces.stream().mapToInt(Piece::getTop).sum();
+        int sumOfBottom = pieces.stream().mapToInt(Piece::getBottom).sum();
+
+        return sumOfTop + sumOfBottom == 0;
+    }
+
+    public boolean isPuzzleValid() {
 
         boolean result = true;
-        if (!isTotalSumZero(pieces)) {
+        if (!isTotalSumZero()) {
             ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.SUM_NOT_ZERO);
             PuzzleGameManager.addException(error.getError());
-//            System.out.println("Puzzle can't be solved, total sum of edges isn't zero");
             result = false;
         }
-        if (!isValidNumberOfStraitSides(pieces)) {
+        if (!isValidNumberOfStraitSides()) {
             ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.WRONG_NUM_STRAIGHTS);
             PuzzleGameManager.addException(error.getError());
-//            System.out.println("Puzzle can't be solved, wrong number of strait edges");
             result = false;
         }
-        List<Corner> missingCorners = findMissingCorners(pieces);
-        if (!missingCorners.isEmpty()) {
 
-//            PuzzleGameManager.addException("Puzzle can't be solved, there are missing corners: ");
-//            System.out.println("Puzzle can't be solved, there are missing corners: ");
+        if(!isSumOfRightAndLeftSidesZero()){
+            ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.SUM_LR_NOT_ZERO);
+            PuzzleGameManager.addException(error.getError());//            System.out.println("Puzzle can't be solved, total sum of edges isn't zero");
+            result = false;
+        }
+
+        if(!isSumOfTopAndBottomSidesZero()){
+            ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.SUM_TB_NOT_ZERO);
+            PuzzleGameManager.addException(error.getError());
+            result = false;
+        }
+
+        List<Corner> missingCorners = findMissingCorners();
+        if (!missingCorners.isEmpty()) {
             for (Corner corner : missingCorners) {
                 ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.MISSING_CORNER, corner.name());
                 PuzzleGameManager.addException(error.getError());
-//                System.out.println(corner.name());
             }
             result = false;
         }
         return result;
-    }
+        }
 }

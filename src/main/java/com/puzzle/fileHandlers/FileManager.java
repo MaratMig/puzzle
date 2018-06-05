@@ -33,7 +33,7 @@ public class FileManager {
 
     private void multiThreadedGame() throws InterruptedException {
         ExecutorService executor = Executors.newFixedThreadPool(THREADS);
-        for (int i = 0; i< fileList.size() ; i++) {
+        for (int i = 0; i < fileList.size() ; i++) {
             int taskNum = i;
             int finalI = i;
             Runnable task = new Runnable() {
@@ -55,7 +55,7 @@ public class FileManager {
         while (!executor.awaitTermination(10L, TimeUnit.MINUTES)) {
             System.out.println("Not yet. Still waiting for games completion");
         }
-        System.out.println("Games over !!!");
+        System.out.println("Game over !!!");
 
     }
 

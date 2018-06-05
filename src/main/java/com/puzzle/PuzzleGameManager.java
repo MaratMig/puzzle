@@ -4,7 +4,6 @@ import com.puzzle.fileHandlers.OutputFile;
 import com.puzzle.fileHandlers.Parser;
 import com.puzzle.utils.ErrorBuilder;
 import com.puzzle.utils.ErrorTypeEnum;
-import com.puzzle.utils.ValidationUtils;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -15,6 +14,7 @@ public class PuzzleGameManager {
     private static Path currentInputFile;
     private Parser parser;
     private OutputFile outPutFile;
+    PuzzleValidator puzzleValidator;
 
     private static List<String> exceptionCollection = new ArrayList<>();
 
@@ -28,7 +28,9 @@ public class PuzzleGameManager {
     public void startGame()  {
         ArrayList<Piece> puzzlePieces = startParser();
         if (puzzlePieces!=null) {
-            boolean isPuzzleCanBeSolved = validateBeforeSolver(puzzlePieces);
+            //boolean isPuzzleCanBeSolved = validateBeforeSolver(puzzlePieces);
+            puzzleValidator = new PuzzleValidator(puzzlePieces);
+            boolean isPuzzleCanBeSolved = puzzleValidator.isPuzzleValid();
             if (isPuzzleCanBeSolved) {
                 solvePuzzle(puzzlePieces);
             }
@@ -41,7 +43,7 @@ public class PuzzleGameManager {
     }
 
     private void solvePuzzle(ArrayList<Piece> puzzlePieces)  {
-        Set<Integer> boardSize = ValidationUtils.getPosibleNumRows(puzzlePieces);
+        Set<Integer> boardSize = puzzleValidator.getValidNumOfRows();
         boolean solutionFound = false;
         for (Integer numOfLines : boardSize) {
             PuzzleSolver puzzleSolver = new PuzzleSolver(puzzlePieces, numOfLines);
@@ -74,7 +76,7 @@ public class PuzzleGameManager {
         outPutFile.writeResultToFile(currentInputFile, outPut.toString());
     }
 
-    public void printPuzzle(Piece[] pieces, int numOfLines)  {
+    private void printPuzzle(Piece[] pieces, int numOfLines)  {
         StringBuffer outPut = new StringBuffer();
         outPut.append(String.format("Solution for %s lines:", numOfLines));
         outPut.append("\n\n");
@@ -96,15 +98,15 @@ public class PuzzleGameManager {
     }
 
 
-    private boolean validateBeforeSolver(List<Piece> pieces) {
+    /*private boolean validateBeforeSolver(List<Piece> pieces) {
         return ValidationUtils.isPuzzleValid(pieces);
     }
-
+*/
     public static void addException(String s) {
         exceptionCollection.add(s);
     }
 
-    public void printValidationErrors()  {
+    private void printValidationErrors()  {
         StringBuilder outPut = new StringBuilder();
         exceptionCollection.stream().forEach(e -> {
                                                     outPut.append(e);

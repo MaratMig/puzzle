@@ -23,11 +23,11 @@ public class OutputFile {
     }
 
 
-    public void writeResultToFile(Path filname, String str)  {
+    public void writeResultToFile(Path fileName, String str)  {
 
         FileOutputStream fos = null;
         try {
-            String output = filname.getFileName().toString().replace(".txt",".output");
+            String output = fileName.getFileName().toString().replace(".txt",".output");
             fos = new FileOutputStream(outPutPath.resolve(output).toString());
             try {
                 try (OutputStreamWriter writer = new OutputStreamWriter(fos)) {
