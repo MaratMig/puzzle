@@ -6,10 +6,9 @@ import com.puzzle.utils.ErrorBuilder;
 import com.puzzle.utils.ErrorCollection;
 import com.puzzle.utils.ErrorTypeEnum;
 import org.apache.commons.math3.primes.Primes;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import org.apache.commons.math3.util.Combinations;
+
+import java.util.*;
 
 public class PuzzleValidator {
 
@@ -39,22 +38,26 @@ public class PuzzleValidator {
         return numOfLinesAfterElimination;
     }
 
-    private Set<Integer> getPosibleNumRows() {
+    protected Set<Integer> getPosibleNumRows() {
 
         int numOfPieces = pieces.size();
         Set<Integer> possibleNumberOfLines = new HashSet<>();
 
         possibleNumberOfLines.add(1);
+        possibleNumberOfLines.add(pieces.size());
+
         List<Integer> factors = new ArrayList<>();
         factors.addAll(Primes.primeFactors(numOfPieces));
 
-        int multiple = 1;
-        for (int factor : factors) {
-            multiple *= factor;
-            possibleNumberOfLines.add(multiple);
-            possibleNumberOfLines.add(numOfPieces / multiple);
+        for(int i=1; i<factors.size();i++){
+            Combinations combinations = new Combinations(factors.size(), i);
+            Iterator<int[]> iterator = combinations.iterator();
+            while (iterator.hasNext()){
+                int[] combination = iterator.next();
+                int multiple = Arrays.stream(combination).map(k->factors.get(k)).reduce(1, (f1, f2) -> f1*f2);
+                possibleNumberOfLines.add(multiple);
+            }
         }
-
         return possibleNumberOfLines;
     }
 
@@ -95,19 +98,15 @@ public class PuzzleValidator {
         for (Piece piece : pieces) {
             if (piece.getLeft() == 0 && piece.getTop() == 0) {
                 isTLCornerExist = true;
-                continue;
             }
             if (piece.getTop() == 0 && piece.getRight() == 0) {
                 isTRCornerExist = true;
-                continue;
             }
             if (piece.getRight() == 0 && piece.getBottom() == 0) {
                 isBRCornerExist = true;
-                continue;
             }
             if (piece.getLeft() == 0 && piece.getBottom() == 0) {
                 isBLCornerExist = true;
-                continue;
             }
         }
 
@@ -167,15 +166,14 @@ public class PuzzleValidator {
             errorCollection.addError(error.getError());
             result = false;
         }
-        if (!isValidNumberOfStraitSides()) {
+        if (!isValidNumberOfStraitSides() || getValidNumOfRows().isEmpty()){
             ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.WRONG_NUM_STRAIGHTS);
             errorCollection.addError(error.getError());
             result = false;
         }
-
         if(!isSumOfRightAndLeftSidesZero()){
             ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.SUM_LR_NOT_ZERO);
-            errorCollection.addError(error.getError());//            System.out.println("Puzzle can't be solved, total sum of edges isn't zero");
+            errorCollection.addError(error.getError());
             result = false;
         }
 
