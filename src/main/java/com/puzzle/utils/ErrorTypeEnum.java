@@ -1,9 +1,12 @@
 package com.puzzle.utils;
 
 public enum ErrorTypeEnum {
-    MISSING_ELEMENTS("Missing puzzle element(s) with the following IDs:%s"),
-    WRONG_ELEMENT_ID("Puzzle of size %d cannot have the following IDs:%s"),
-    WRONG_ELEMENT_FORMAT("Puzzle ID %d has wrong data:%s"),
+    MISSING_ELEMENTS("Missing puzzle element(s) with the following IDs: %s"),
+    WRONG_ELEMENT_ID("Puzzle of size %s cannot have the following IDs: %s"),
+    WRONG_NUM_OF_PIECES("Wrong number of pieces. Expected: %s got: %s"),
+    WRONG_ELEMENT_FORMAT("Puzzle ID %s has wrong data:%s"),
+    WRONG_ELEMENT_FORMAT_GENERIC("Missing piece details."),
+    WRONG_FILE_HEADER_FORMAT("Incorrect file header, no number of lines info"),
     MISSING_CORNER("Cannot solve puzzle: missing corner element:%s"),
     WRONG_NUM_STRAIGHTS("Cannot solve puzzle: wrong number of straight edges"),
     SUM_NOT_ZERO("Cannot solve puzzle: sum of edges is not zero"),

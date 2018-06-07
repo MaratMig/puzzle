@@ -1,7 +1,9 @@
 package com.puzzle;
 
-
+import com.puzzle.entities.Corner;
+import com.puzzle.entities.Piece;
 import com.puzzle.utils.ErrorBuilder;
+import com.puzzle.utils.ErrorCollection;
 import com.puzzle.utils.ErrorTypeEnum;
 import org.apache.commons.math3.primes.Primes;
 import java.util.ArrayList;
@@ -12,9 +14,14 @@ import java.util.Set;
 public class PuzzleValidator {
 
     private List<Piece> pieces;
+    private ErrorCollection errorCollection = new ErrorCollection();;
 
     public PuzzleValidator(List<Piece> pieces) {
         this.pieces = pieces;
+    }
+
+    public List<String> getErrorCollection() {
+        return errorCollection.getErrors();
     }
 
     public Set<Integer> getValidNumOfRows() {
@@ -157,24 +164,24 @@ public class PuzzleValidator {
         boolean result = true;
         if (!isTotalSumZero()) {
             ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.SUM_NOT_ZERO);
-            PuzzleGameManager.addException(error.getError());
+            errorCollection.addError(error.getError());
             result = false;
         }
         if (!isValidNumberOfStraitSides()) {
             ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.WRONG_NUM_STRAIGHTS);
-            PuzzleGameManager.addException(error.getError());
+            errorCollection.addError(error.getError());
             result = false;
         }
 
         if(!isSumOfRightAndLeftSidesZero()){
             ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.SUM_LR_NOT_ZERO);
-            PuzzleGameManager.addException(error.getError());//            System.out.println("Puzzle can't be solved, total sum of edges isn't zero");
+            errorCollection.addError(error.getError());//            System.out.println("Puzzle can't be solved, total sum of edges isn't zero");
             result = false;
         }
 
         if(!isSumOfTopAndBottomSidesZero()){
             ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.SUM_TB_NOT_ZERO);
-            PuzzleGameManager.addException(error.getError());
+            errorCollection.addError(error.getError());
             result = false;
         }
 
@@ -182,7 +189,7 @@ public class PuzzleValidator {
         if (!missingCorners.isEmpty()) {
             for (Corner corner : missingCorners) {
                 ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.MISSING_CORNER, corner.name());
-                PuzzleGameManager.addException(error.getError());
+                errorCollection.addError(error.getError());
             }
             result = false;
         }

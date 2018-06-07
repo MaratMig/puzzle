@@ -1,4 +1,4 @@
-package com.puzzle;
+package com.puzzle.entities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,11 +6,13 @@ import java.util.List;
 public class Piece {
 
     private int id;
+    private int sum;
     private int[] sides = new int[4];
 
     public Piece(int id, int[] sides) {
         this.id = id;
         this.sides = sides;
+        calcSum();
     }
 
     public int getId() {
@@ -33,9 +35,13 @@ public class Piece {
         return sides[3];
     }
 
-
     public int getSum() {
-        int sum = 0;
+        return sum;
+    }
+
+
+    private int calcSum() {
+        this.sum = 0;
 
         for (int side : sides) {
             sum += side;

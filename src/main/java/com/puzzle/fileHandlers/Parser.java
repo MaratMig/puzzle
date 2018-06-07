@@ -1,12 +1,16 @@
 package com.puzzle.fileHandlers;
 
-import com.puzzle.Piece;
+import com.puzzle.entities.Piece;
+import com.puzzle.utils.ErrorBuilder;
+import com.puzzle.utils.ErrorTypeEnum;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Scanner;
 
 public class Parser {
     private Path fileName;
@@ -48,11 +52,15 @@ public class Parser {
         }
         Iterator<String> it = lines.iterator();
         try{
+            it.toString().trim();
             parts = it.next().split("=", 2);
             fileHeader = parts[0].trim();
-            numOfLines = Integer.parseInt(parts[1].trim());
-        } catch (NumberFormatException e) {
-            inputValidationErrors.add("Incorrect file header, no number of lines info");
+            String numOnly = parts[1].replaceAll("[^\\d.]", "");
+            String[] split = numOnly.split(" ");
+            numOfLines = Integer.parseInt(split[0].trim());
+        } catch (Exception e) {
+            ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.WRONG_FILE_HEADER_FORMAT);
+            inputValidationErrors.add(error.getError());
             numOfLines = -1;
         }
 
@@ -66,14 +74,15 @@ public class Parser {
 
     }
 
-    public Boolean checkInputValidity() {
+    private Boolean checkInputValidity() {
         ArrayList<Integer> ids = new ArrayList<>();
         ArrayList<Integer> wrongElementIDs = new ArrayList<>();
         ArrayList<Integer> correctElementIDs = new ArrayList<>();
         ArrayList<Integer> missingElementIDs = new ArrayList<>();
 
         if(numOfLines != puzzelPiecesInput.size()){
-            inputValidationErrors.add("Wrong number of pieces. Expected: " + numOfLines + " got: " + puzzelPiecesInput.size());
+            ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.WRONG_NUM_OF_PIECES, String.valueOf(numOfLines), puzzelPiecesInput.size());
+            inputValidationErrors.add(error.getError());
         }
 
         Iterator<String[]> it = puzzelPiecesInput.iterator();
@@ -89,6 +98,9 @@ public class Parser {
         for(int i = 0; i < ids.size(); i++){
             if(ids.get(i) < 1 || ids.get(i) > numOfLines){
                 wrongElementIDs.add(ids.get(i));
+                ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.WRONG_ELEMENT_ID, String.valueOf(numOfLines), String.valueOf(i));
+                inputValidationErrors.add(error.getError());
+
             }else {
                 correctElementIDs.add(ids.get(i));
             }
@@ -96,6 +108,9 @@ public class Parser {
         for(int i = 1; i <= numOfLines; i++){
             if(!correctElementIDs.contains(i)){
                 missingElementIDs.add(i);
+                ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.MISSING_ELEMENTS, String.valueOf(i));
+                inputValidationErrors.add(error.getError());
+
             }
         }
 
@@ -160,26 +175,41 @@ public class Parser {
             if(temp.charAt(0) != '#' ){
                 temp = temp.trim();
                 temp = temp.replaceAll("\\s+"," ");
-                String[] tempPieces = temp.split(" ");
+                String[] tempPieces = temp.split(" ",6);
                 puzzelPiecesInput.add(tempPieces);
             }
         }
     }
 
     private Integer[] checkIfAllNumbers(String[] next) {
-        Integer[] intTemp = new Integer[next.length];
+        Integer[] intTemp = new Integer[5];
         int counter = 0;
-        for (String str: next) {
+        boolean validationFailed=false;
+//        for (String str: next) {
+        for (int i=0 ; i < 5 ; i++) {
             Integer temp;
             try{
-                temp = Integer.parseInt(str);
-                intTemp[counter] = temp;
+                temp = Integer.parseInt(next[i]);
+                if (i!=0 && (temp!=0 && temp!=1 && temp!=-1)) {
+                    throw new NumberFormatException("not puzzle piece") ;
+
+                }
+                else intTemp[counter] = temp;
             }catch (NumberFormatException e){
-                inputValidationErrors.add("NumberFormatException was thrown !" + Arrays.toString(next));
-                intTemp = null;
-                break;
+                validationFailed = true;
+                ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.WRONG_ELEMENT_FORMAT, next[0].toString(), next[i].toString()  );
+                inputValidationErrors.add(error.getError());
             }
+            catch (ArrayIndexOutOfBoundsException e){
+                validationFailed = true;
+                ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.WRONG_ELEMENT_FORMAT_GENERIC );
+                inputValidationErrors.add(error.getError());
+            }
+
             counter++;
+        }
+        if (validationFailed) {
+            return intTemp=null;
         }
         return intTemp;
     }

@@ -1,6 +1,6 @@
 package com.puzzle.utils;
 
-import com.puzzle.Piece;
+import com.puzzle.entities.Piece;
 
 import java.util.List;
 import java.util.stream.Collectors;

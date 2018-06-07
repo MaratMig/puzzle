@@ -1,11 +1,10 @@
-import com.puzzle.Piece;
+import com.puzzle.entities.Piece;
 import com.puzzle.PuzzleSolver;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
