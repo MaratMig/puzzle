@@ -1,8 +1,10 @@
 package com.puzzle;
 
+import com.puzzle.entities.Piece;
 import com.puzzle.fileHandlers.OutputFile;
 import com.puzzle.fileHandlers.Parser;
 import com.puzzle.utils.ErrorBuilder;
+import com.puzzle.utils.ErrorCollection;
 import com.puzzle.utils.ErrorTypeEnum;
 
 import java.nio.file.Path;
@@ -10,43 +12,40 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class PuzzleGameManager {
-    private static Path currentInputFile;
+public class PuzzleGameManager implements Runnable {
+    private Path fileToHandle;
     private Parser parser;
     private OutputFile outPutFile;
-    PuzzleValidator puzzleValidator;
+    private PuzzleValidator puzzleValidator;
+    private PuzzleSolver puzzleSolver;
+    private ErrorCollection errorCollection= new ErrorCollection();;
 
-    private static List<String> exceptionCollection = new ArrayList<>();
-
-
-    public PuzzleGameManager(Path currentInputFile) {
-        this.currentInputFile = currentInputFile;
-        outPutFile = new OutputFile(currentInputFile.getParent().resolve("output"));
-
+    public PuzzleGameManager(Path fileToHandle) {
+        this.fileToHandle = fileToHandle;
+        outPutFile = new OutputFile(fileToHandle.getParent().resolve("output"));
     }
 
-    public void startGame()  {
+    public void startGame() {
         ArrayList<Piece> puzzlePieces = startParser();
-        if (puzzlePieces!=null) {
+        if (puzzlePieces != null) {
             //boolean isPuzzleCanBeSolved = validateBeforeSolver(puzzlePieces);
             puzzleValidator = new PuzzleValidator(puzzlePieces);
             boolean isPuzzleCanBeSolved = puzzleValidator.isPuzzleValid();
             if (isPuzzleCanBeSolved) {
                 solvePuzzle(puzzlePieces);
-            }
-            else {
+            } else {
                 printValidationErrors();
             }
-        }else {
-                printParserErrors();
-            }
+        } else {
+            printParserErrors();
+        }
     }
 
-    private void solvePuzzle(ArrayList<Piece> puzzlePieces)  {
+    private void solvePuzzle(ArrayList<Piece> puzzlePieces) {
         Set<Integer> boardSize = puzzleValidator.getValidNumOfRows();
         boolean solutionFound = false;
         for (Integer numOfLines : boardSize) {
-            PuzzleSolver puzzleSolver = new PuzzleSolver(puzzlePieces, numOfLines);
+            puzzleSolver = new PuzzleSolver(puzzlePieces, numOfLines);
             if (puzzleSolver.tryToSolvePuzzleRectangle()) {
                 Piece[] solutions = puzzleSolver.getResult();
 
@@ -55,15 +54,16 @@ public class PuzzleGameManager {
                 break;
             }
         }
-        if (!solutionFound) {printSolverErrors();}
+        if (!solutionFound) {
+            printSolverErrors();
+        }
     }
 
     private void printSolverErrors() {
         ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.NO_SOLUTION);
-        PuzzleGameManager.addException(error.getError());
+        errorCollection.addError(error.getError());
         printValidationErrors();
     }
-
 
     private void printParserErrors() {
         ArrayList<String> inputValidationErrors = parser.getInputValidationErrors();
@@ -73,10 +73,10 @@ public class PuzzleGameManager {
             outPut.append("\n");
             System.out.println(e);
         });
-        outPutFile.writeResultToFile(currentInputFile, outPut.toString());
+        outPutFile.writeResultToFile(fileToHandle, outPut.toString());
     }
 
-    private void printPuzzle(Piece[] pieces, int numOfLines)  {
+    private void printPuzzle(Piece[] pieces, int numOfLines) {
         StringBuffer outPut = new StringBuffer();
         outPut.append(String.format("Solution for %s lines:", numOfLines));
         outPut.append("\n\n");
@@ -88,34 +88,31 @@ public class PuzzleGameManager {
             }
         }
         System.out.println(outPut.toString());
-        outPutFile.writeResultToFile(currentInputFile, outPut.toString());
+        outPutFile.writeResultToFile(fileToHandle, outPut.toString());
     }
 
-    private ArrayList<Piece> startParser()  {
-        parser = new Parser(currentInputFile);
+    private ArrayList<Piece> startParser() {
+        parser = new Parser(fileToHandle);
         ArrayList<Piece> puzzelPiecesInput = parser.parse();
         return puzzelPiecesInput;
     }
 
-
-    /*private boolean validateBeforeSolver(List<Piece> pieces) {
-        return ValidationUtils.isPuzzleValid(pieces);
-    }
-*/
-    public static void addException(String s) {
-        exceptionCollection.add(s);
-    }
-
-    private void printValidationErrors()  {
+    private void printValidationErrors() {
         StringBuilder outPut = new StringBuilder();
-        exceptionCollection.stream().forEach(e -> {
-                                                    outPut.append(e);
-                                                    outPut.append("\n");
-                                                    System.out.println(e);
-                                                });
-        outPutFile.writeResultToFile(currentInputFile, outPut.toString());
+        List<String> validatorErrors = puzzleValidator.getErrorCollection();
+        validatorErrors.stream().forEach(e -> {
+            outPut.append(e);
+            outPut.append("\n");
+            System.out.println(e);
+        });
+        outPutFile.writeResultToFile(fileToHandle, outPut.toString());
 
     }
 
+
+    @Override
+    public void run() {
+        startGame();
+    }
 
 }

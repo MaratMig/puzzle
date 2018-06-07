@@ -1,36 +1,27 @@
 package com.puzzle;
 
-import com.puzzle.fileHandlers.FileManager;
-
-import java.nio.file.Path;
+import com.puzzle.fileHandlers.GameExecutor;
+import com.puzzle.utils.ConfigManager;
 
 public class Main {
 
-    private static String inputPath = null;
-
     public static void main(String[] args) throws Exception {
 
+        //TODO: In production version should be uncomment
+//        // Check how many arguments were passed in
+//        if(args.length == 0)
+//        {
+//            System.out.println("Proper Usage is: input files path should be provided");
+//            System.exit(0);
+//        }
 
-        // Check how many arguments were passed in
-        if (args.length != 2) {
-            System.out.println("Proper Usage is: java program filenames");
-            //            System.exit(0);
-        }
-
-        //TODO: In production version should not use default
-        // input and output files should entered from command line
-
-        setInputPath("src\\main\\resources\\inputFiles");
-
-        FileManager fileManager = new FileManager();
-        fileManager.startGames(getInputPath());
+        ConfigManager configManager = new ConfigManager();
+        //TODO: In production version we should not use default
+//        configManager.setInputPath(args[0]);
+        configManager.setInputPath("src\\main\\resources\\inputFiles");
+        GameExecutor gameExecutor = new GameExecutor();
+        gameExecutor.startGames(configManager.getInputPath());
     }
 
-    public static String getInputPath() {
-        return inputPath;
-    }
 
-    public static void setInputPath(String inputPath) {
-        Main.inputPath = inputPath;
-    }
 }

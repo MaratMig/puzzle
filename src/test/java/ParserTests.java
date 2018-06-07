@@ -1,13 +1,15 @@
-import com.puzzle.Piece;
+import com.puzzle.entities.Piece;
 import com.puzzle.fileHandlers.Parser;
-import org.junit.Test;
+import com.puzzle.utils.ErrorTypeEnum;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ParserTests {
 
@@ -18,11 +20,10 @@ public class ParserTests {
         File file = new File(resourceDir + "dashAfterPieceDetails.txt");
         Parser parse = new Parser(file.toPath());
         ArrayList<Piece> parseList = parse.parse();
-        assertNull(parseList);
+        assertNotNull(parseList);
         ArrayList<String> inputValidationErrors = parse.getInputValidationErrors();
-        inputValidationErrors.contains("errror");
-        inputValidationErrors.get(0).equals("");
-
+        assertTrue(inputValidationErrors.size()==0);
+        assertTrue(parseList.size()==4);
     }
 
     @Test
@@ -30,9 +31,16 @@ public class ParserTests {
         File file = new File(resourceDir + "elementsNumberEqualsMissing.txt");
         Parser parse = new Parser(file.toPath());
         ArrayList<Piece> parseList = parse.parse();
-        assertNull(parseList);
         ArrayList<String> inputValidationErrors = parse.getInputValidationErrors();
-        inputValidationErrors.get(0).equals("");
+        assertTrue(inputValidationErrors.size()!=0);
+        boolean contains=false;
+        for (String str :inputValidationErrors){
+            if (str.contains(ErrorTypeEnum.WRONG_FILE_HEADER_FORMAT.getValue())){
+                contains=true;
+                break;
+            }
+        }
+        assertTrue(contains);
 
     }
 
@@ -41,9 +49,10 @@ public class ParserTests {
         File file = new File(resourceDir + "emptyLines.txt");
         Parser parse = new Parser(file.toPath());
         ArrayList<Piece> parseList = parse.parse();
-        assertNull(parseList);
+        assertNotNull(parseList);
         ArrayList<String> inputValidationErrors = parse.getInputValidationErrors();
-        inputValidationErrors.get(0).equals("");
+        assertTrue(inputValidationErrors.size()==0);
+        assertTrue(parseList.size()==4);
 
     }
 
@@ -54,7 +63,15 @@ public class ParserTests {
         ArrayList<Piece> parseList = parse.parse();
         assertNull(parseList);
         ArrayList<String> inputValidationErrors = parse.getInputValidationErrors();
-        inputValidationErrors.get(0).equals("");
+        assertTrue(inputValidationErrors.size()!=0);
+        boolean contains=false;
+        for (String str :inputValidationErrors){
+            if (str.contains(ErrorTypeEnum.WRONG_ELEMENT_FORMAT.getValue().substring(0,8))){
+                contains=true;
+                break;
+            }
+        }
+        assertTrue(contains);
 
     }
 
@@ -65,7 +82,15 @@ public class ParserTests {
         ArrayList<Piece> parseList = parse.parse();
         assertNull(parseList);
         ArrayList<String> inputValidationErrors = parse.getInputValidationErrors();
-        inputValidationErrors.get(0).equals("");
+        assertTrue(inputValidationErrors.size()!=0);
+        boolean contains=false;
+        for (String str :inputValidationErrors){
+            if (str.contains(ErrorTypeEnum.WRONG_NUM_OF_PIECES.getValue().substring(0,8))){
+                contains=true;
+                break;
+            }
+        }
+        assertTrue(contains);
 
     }
 
@@ -74,18 +99,35 @@ public class ParserTests {
         File file = new File(resourceDir + "minusCharAppearTwice.txt");
         Parser parse = new Parser(file.toPath());
         ArrayList<Piece> parseList = parse.parse();
-        assertTrue(parseList.size() > 0);
+        assertNull(parseList);
+        ArrayList<String> inputValidationErrors = parse.getInputValidationErrors();
+        assertTrue(inputValidationErrors.size()!=0);
+        boolean contains=false;
+        for (String str :inputValidationErrors){
+            if (str.contains(ErrorTypeEnum.WRONG_ELEMENT_FORMAT.getValue().substring(0,8))){
+                contains=true;
+                break;
+            }
+        }
+        assertTrue(contains);
 
     }
 
     @Test
     public void missingElementsNum() throws IOException {
-        File file = new File(resourceDir + "dashAfterPieceDetails.txt");
+        File file = new File(resourceDir + "missingElementsNum.txt");
         Parser parse = new Parser(file.toPath());
         ArrayList<Piece> parseList = parse.parse();
-        assertNull(parseList);
         ArrayList<String> inputValidationErrors = parse.getInputValidationErrors();
-        inputValidationErrors.get(0).equals("");
+        assertTrue(inputValidationErrors.size()!=0);
+        boolean contains=false;
+        for (String str :inputValidationErrors){
+            if (str.contains(ErrorTypeEnum.WRONG_FILE_HEADER_FORMAT.getValue())){
+                contains=true;
+                break;
+            }
+        }
+        assertTrue(contains);
 
     }
 
@@ -94,9 +136,16 @@ public class ParserTests {
         File file = new File(resourceDir + "missingElementsNumString.txt");
         Parser parse = new Parser(file.toPath());
         ArrayList<Piece> parseList = parse.parse();
-        assertNull(parseList);
         ArrayList<String> inputValidationErrors = parse.getInputValidationErrors();
-        inputValidationErrors.get(0).equals("");
+        assertTrue(inputValidationErrors.size()!=0);
+        boolean contains=false;
+        for (String str :inputValidationErrors){
+            if (str.contains(ErrorTypeEnum.WRONG_FILE_HEADER_FORMAT.getValue())){
+                contains=true;
+                break;
+            }
+        }
+        assertTrue(contains);
 
     }
 
@@ -105,9 +154,16 @@ public class ParserTests {
         File file = new File(resourceDir + "missingHeader.txt");
         Parser parse = new Parser(file.toPath());
         ArrayList<Piece> parseList = parse.parse();
-        assertNull(parseList);
         ArrayList<String> inputValidationErrors = parse.getInputValidationErrors();
-        inputValidationErrors.get(0).equals("");
+        assertTrue(inputValidationErrors.size()!=0);
+        boolean contains=false;
+        for (String str :inputValidationErrors){
+            if (str.contains(ErrorTypeEnum.WRONG_FILE_HEADER_FORMAT.getValue())){
+                contains=true;
+                break;
+            }
+        }
+        assertTrue(contains);
 
     }
 
@@ -118,7 +174,15 @@ public class ParserTests {
         ArrayList<Piece> parseList = parse.parse();
         assertNull(parseList);
         ArrayList<String> inputValidationErrors = parse.getInputValidationErrors();
-        inputValidationErrors.get(0).equals("");
+        assertTrue(inputValidationErrors.size()!=0);
+        boolean contains=false;
+        for (String str :inputValidationErrors){
+            if (str.contains(ErrorTypeEnum.WRONG_ELEMENT_FORMAT_GENERIC.getValue())){
+                contains=true;
+                break;
+            }
+        }
+        assertTrue(contains);
 
     }
 
@@ -129,7 +193,15 @@ public class ParserTests {
         ArrayList<Piece> parseList = parse.parse();
         assertNull(parseList);
         ArrayList<String> inputValidationErrors = parse.getInputValidationErrors();
-        inputValidationErrors.get(0).equals("");
+        assertTrue(inputValidationErrors.size()!=0);
+        boolean contains=false;
+        for (String str :inputValidationErrors){
+            if (str.contains(ErrorTypeEnum.WRONG_ELEMENT_FORMAT_GENERIC.getValue())){
+                contains=true;
+                break;
+            }
+        }
+        assertTrue(contains);
 
     }
 
@@ -140,7 +212,15 @@ public class ParserTests {
         ArrayList<Piece> parseList = parse.parse();
         assertNull(parseList);
         ArrayList<String> inputValidationErrors = parse.getInputValidationErrors();
-        inputValidationErrors.get(0).equals("");
+        assertTrue(inputValidationErrors.size()!=0);
+        boolean contains=false;
+        for (String str :inputValidationErrors){
+            if (str.contains(ErrorTypeEnum.WRONG_ELEMENT_ID.getValue().substring(0,8))){
+                contains=true;
+                break;
+            }
+        }
+        assertTrue(contains);
 
     }
 
@@ -151,7 +231,15 @@ public class ParserTests {
         ArrayList<Piece> parseList = parse.parse();
         assertNull(parseList);
         ArrayList<String> inputValidationErrors = parse.getInputValidationErrors();
-        inputValidationErrors.get(0).equals("");
+        assertTrue(inputValidationErrors.size()!=0);
+        boolean contains=false;
+        for (String str :inputValidationErrors){
+            if (str.contains(ErrorTypeEnum.MISSING_ELEMENTS.getValue().substring(0,8))){
+                contains=true;
+                break;
+            }
+        }
+        assertTrue(contains);
 
     }
 
@@ -162,7 +250,15 @@ public class ParserTests {
         ArrayList<Piece> parseList = parse.parse();
         assertNull(parseList);
         ArrayList<String> inputValidationErrors = parse.getInputValidationErrors();
-        inputValidationErrors.get(0).equals("");
+        assertTrue(inputValidationErrors.size()!=0);
+        boolean contains=false;
+        for (String str :inputValidationErrors){
+            if (str.contains(ErrorTypeEnum.WRONG_ELEMENT_FORMAT.getValue().substring(0,8))){
+                contains=true;
+                break;
+            }
+        }
+        assertTrue(contains);
 
     }
 

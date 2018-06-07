@@ -1,4 +1,4 @@
-package com.puzzle;
+package com.puzzle.entities;
 
 public enum Corner {
     TL,

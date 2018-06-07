@@ -1,4 +1,4 @@
-import com.puzzle.Piece;
+import com.puzzle.entities.Piece;
 
 import java.util.ArrayList;
 import java.util.List;

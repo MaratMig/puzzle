@@ -1,5 +1,7 @@
 package com.puzzle;
 
+import com.puzzle.entities.Corner;
+import com.puzzle.entities.Piece;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

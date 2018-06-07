@@ -1,5 +1,6 @@
 package com.puzzle;
 
+import com.puzzle.entities.Piece;
 import com.puzzle.utils.MatchingUtils;
 
 import java.util.stream.Collectors;

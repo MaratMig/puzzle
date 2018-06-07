@@ -1,7 +1,5 @@
-import com.puzzle.Piece;
+import com.puzzle.entities.Piece;
 import com.puzzle.utils.MatchingUtils;
-import org.junit.BeforeClass;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
