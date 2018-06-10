@@ -98,7 +98,7 @@ public class Parser {
         for(int i = 0; i < ids.size(); i++){
             if(ids.get(i) < 1 || ids.get(i) > numOfLines){
                 wrongElementIDs.add(ids.get(i));
-                ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.WRONG_ELEMENT_ID, String.valueOf(numOfLines), String.valueOf(i));
+                ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.WRONG_ELEMENT_ID, String.valueOf(numOfLines), String.valueOf(i+1));
                 inputValidationErrors.add(error.getError());
 
             }else {
