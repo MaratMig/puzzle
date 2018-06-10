@@ -153,7 +153,6 @@ public class ParserTests {
     public void missingHeader() throws IOException {
         File file = new File(resourceDir + "missingHeader.txt");
         Parser parse = new Parser(file.toPath());
-        ArrayList<Piece> parseList = parse.parse();
         ArrayList<String> inputValidationErrors = parse.getInputValidationErrors();
         assertTrue(inputValidationErrors.size()!=0);
         boolean contains=false;
@@ -260,6 +259,43 @@ public class ParserTests {
         }
         assertTrue(contains);
 
+    }
+
+
+    @Test
+    public void moreElementThenLines() throws IOException {
+        File file = new File(resourceDir + "moreElementThenLines.txt");
+        Parser parse = new Parser(file.toPath());
+        ArrayList<Piece> parseList = parse.parse();
+        assertNull(parseList);
+        ArrayList<String> inputValidationErrors = parse.getInputValidationErrors();
+        assertTrue(inputValidationErrors.size() != 0);
+        boolean contains = false;
+        for (String str : inputValidationErrors) {
+            if (str.contains(ErrorTypeEnum.WRONG_ELEMENT_ID.getValue().substring(0, 8))) {
+                contains = true;
+                break;
+            }
+        }
+        assertTrue(contains);
+    }
+
+    @Test
+    public void missingElements() throws IOException {
+        File file = new File(resourceDir + "missingElements.txt");
+        Parser parse = new Parser(file.toPath());
+        ArrayList<Piece> parseList = parse.parse();
+        assertNull(parseList);
+        ArrayList<String> inputValidationErrors = parse.getInputValidationErrors();
+        assertTrue(inputValidationErrors.size() != 0);
+        boolean contains = false;
+        for (String str : inputValidationErrors) {
+            if (str.contains(ErrorTypeEnum.MISSING_ELEMENTS.getValue().substring(0, 8))) {
+                contains = true;
+                break;
+            }
+        }
+        assertTrue(contains);
     }
 
 
