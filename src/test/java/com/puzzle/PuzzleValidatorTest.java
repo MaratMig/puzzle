@@ -109,7 +109,7 @@ class PuzzleValidatorTest {
         List<Integer> actualPossibleNumbers = new ArrayList<>();
         actualPossibleNumbers.addAll(validator.getPosibleNumRows());
 
-        assertThat(actualPossibleNumbers).asList().containsExactlyInAnyOrderElementsOf(expectedPossibleNumberOfRows);
+        assertThat(actualPossibleNumbers).asList().containsExactlyInAnyOrder(expectedPossibleNumberOfRows);
     }
 
     @Test
@@ -123,7 +123,7 @@ class PuzzleValidatorTest {
         List<Integer> actualPossibleNumbers = new ArrayList<>();
         actualPossibleNumbers.addAll(validator.getPosibleNumRows());
 
-        assertThat(actualPossibleNumbers).asList().containsExactlyInAnyOrderElementsOf(expectedPossibleNumberOfRows);
+        assertThat(actualPossibleNumbers).asList().containsExactlyInAnyOrder(expectedPossibleNumberOfRows);
     }
 
 

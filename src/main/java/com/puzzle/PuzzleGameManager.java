@@ -28,7 +28,6 @@ public class PuzzleGameManager implements Runnable {
     public void startGame() {
         ArrayList<Piece> puzzlePieces = startParser();
         if (puzzlePieces != null) {
-            //boolean isPuzzleCanBeSolved = validateBeforeSolver(puzzlePieces);
             puzzleValidator = new PuzzleValidator(puzzlePieces);
             boolean isPuzzleCanBeSolved = puzzleValidator.isPuzzleValid();
             if (isPuzzleCanBeSolved) {
