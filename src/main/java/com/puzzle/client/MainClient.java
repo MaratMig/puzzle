@@ -1,9 +1,8 @@
-package com.puzzle;
+package com.puzzle.client;
 
-import com.puzzle.fileHandlers.GameExecutor;
-import com.puzzle.utils.ConfigManager;
+import com.puzzle.client.utils.ClientConfigManager;
 
-public class Main {
+public class MainClient {
 
     public static void main(String[] args) throws Exception {
 
@@ -15,12 +14,12 @@ public class Main {
 //            System.exit(0);
 //        }
 
-        ConfigManager configManager = new ConfigManager();
+        ClientConfigManager configManager = new ClientConfigManager();
         //TODO: In production version we should not use default
 //        configManager.setInputPath(args[0]);
         configManager.setInputPath("src\\main\\resources\\inputFiles");
-        GameExecutor gameExecutor = new GameExecutor();
-        gameExecutor.startGames(configManager.getInputPath());
+        ClientExecutor clientExecutor = new ClientExecutor();
+        clientExecutor.startGames(configManager.getInputPath());
     }
 
 

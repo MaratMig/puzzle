@@ -1,4 +1,4 @@
-package com.puzzle.utils;
+package com.puzzle.server.utils;
 
 import com.puzzle.common.entities.Piece;
 

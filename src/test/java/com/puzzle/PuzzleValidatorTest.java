@@ -1,7 +1,8 @@
 package com.puzzle;
 
-import com.puzzle.entities.Corner;
-import com.puzzle.entities.Piece;
+import com.puzzle.common.entities.Corner;
+import com.puzzle.common.entities.Piece;
+import com.puzzle.server.PuzzleValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -109,7 +110,7 @@ class PuzzleValidatorTest {
         List<Integer> actualPossibleNumbers = new ArrayList<>();
         actualPossibleNumbers.addAll(validator.getPosibleNumRows());
 
-        assertThat(actualPossibleNumbers).asList().containsExactlyInAnyOrderElementsOf(expectedPossibleNumberOfRows);
+        assertThat(actualPossibleNumbers).asList().containsExactlyInAnyOrder(expectedPossibleNumberOfRows);
     }
 
     @Test
@@ -123,7 +124,7 @@ class PuzzleValidatorTest {
         List<Integer> actualPossibleNumbers = new ArrayList<>();
         actualPossibleNumbers.addAll(validator.getPosibleNumRows());
 
-        assertThat(actualPossibleNumbers).asList().containsExactlyInAnyOrderElementsOf(expectedPossibleNumberOfRows);
+        assertThat(actualPossibleNumbers).asList().containsExactlyInAnyOrder(expectedPossibleNumberOfRows);
     }
 
 

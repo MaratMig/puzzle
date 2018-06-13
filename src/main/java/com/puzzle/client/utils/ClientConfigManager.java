@@ -1,10 +1,10 @@
-package com.puzzle.utils;
+package com.puzzle.client.utils;
 
-public class ConfigManager {
+public class ClientConfigManager {
 
     private String inputPath;
 
-    public ConfigManager() {
+    public ClientConfigManager() {
     }
 
     public String getInputPath() {

@@ -1,4 +1,4 @@
-package com.puzzle.utils;
+package com.puzzle.common.utils;
 
 import java.util.ArrayList;
 import java.util.List;

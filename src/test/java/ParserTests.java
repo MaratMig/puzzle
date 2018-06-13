@@ -1,6 +1,6 @@
-import com.puzzle.entities.Piece;
+import com.puzzle.common.entities.Piece;
 import com.puzzle.fileHandlers.Parser;
-import com.puzzle.utils.ErrorTypeEnum;
+import com.puzzle.common.utils.ErrorTypeEnum;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

@@ -1,8 +1,8 @@
 package com.puzzle.fileHandlers;
 
-import com.puzzle.entities.Piece;
-import com.puzzle.utils.ErrorBuilder;
-import com.puzzle.utils.ErrorTypeEnum;
+import com.puzzle.common.entities.Piece;
+import com.puzzle.common.utils.ErrorBuilder;
+import com.puzzle.common.utils.ErrorTypeEnum;
 
 import java.io.File;
 import java.io.FileNotFoundException;

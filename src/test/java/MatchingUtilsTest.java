@@ -1,4 +1,4 @@
-import com.puzzle.entities.Piece;
+import com.puzzle.common.entities.Piece;
 import com.puzzle.utils.MatchingUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

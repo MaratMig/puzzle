@@ -1,6 +1,4 @@
-package com.puzzle.fileHandlers;
-
-import com.puzzle.PuzzleGameManager;
+package com.puzzle.client;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,10 +10,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class GameExecutor {
+public class ClientExecutor {
     private final static int THREADS = 4;
 
-    public GameExecutor() {
+    public ClientExecutor() {
     }
 
     public void startGames(String path) throws IOException, InterruptedException {
@@ -32,7 +30,7 @@ public class GameExecutor {
     private void multiThreadedGame(List<Path> fileList) throws InterruptedException {
         ExecutorService executor = Executors.newFixedThreadPool(THREADS);
         for (int i = 0; i < fileList.size() ; i++) {
-            Runnable worker = new PuzzleGameManager(fileList.get(i));
+            Runnable worker = new PuzzleClientManager(fileList.get(i));
             executor.execute(worker);
         }
         executor.shutdown();

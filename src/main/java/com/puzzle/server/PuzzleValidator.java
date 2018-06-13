@@ -1,10 +1,10 @@
-package com.puzzle;
+package com.puzzle.server;
 
-import com.puzzle.entities.Corner;
-import com.puzzle.entities.Piece;
-import com.puzzle.utils.ErrorBuilder;
-import com.puzzle.utils.ErrorCollection;
-import com.puzzle.utils.ErrorTypeEnum;
+import com.puzzle.common.entities.Corner;
+import com.puzzle.common.entities.Piece;
+import com.puzzle.common.utils.ErrorBuilder;
+import com.puzzle.common.utils.ErrorCollection;
+import com.puzzle.common.utils.ErrorTypeEnum;
 import org.apache.commons.math3.primes.Primes;
 import org.apache.commons.math3.util.Combinations;
 
@@ -38,7 +38,7 @@ public class PuzzleValidator {
         return numOfLinesAfterElimination;
     }
 
-    protected Set<Integer> getPosibleNumRows() {
+    public Set<Integer> getPosibleNumRows() {
 
         int numOfPieces = pieces.size();
         Set<Integer> possibleNumberOfLines = new HashSet<>();

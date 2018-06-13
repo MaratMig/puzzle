@@ -1,13 +1,13 @@
-package com.puzzle;
+package com.puzzle.server;
 
-import com.puzzle.entities.Piece;
+import com.puzzle.common.entities.Piece;
 import com.puzzle.utils.MatchingUtils;
 
-import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PuzzleSolver {
 
