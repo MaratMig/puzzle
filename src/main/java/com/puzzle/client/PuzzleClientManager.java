@@ -25,16 +25,21 @@ public class PuzzleClientManager implements Runnable {
         ArrayList<Piece> puzzlePieces = startParser();
         if (puzzlePieces != null) {
             //covert pieces list to json
+            //TODO add code that conver pieces list to JSON object
+            //this piece of code is only for testing purpose
+            JsonObject test = new JsonObject();
+            test.addProperty("pieces","piece1");
 
-            JsonObject person = new JsonObject();
-            person.addProperty("firstName","Yuli");
             //send json to server
             Connector connector = new Connector();
-            String result = connector.connectionToServer(1, person);
+            String result = connector.connectionToServer(1, test);
             System.out.println(result);
 
+            //TODO convert result back to json object
+            //TODO get relevant data from json object to continue bellow flow
+            //result received as string we should convert it back to json object
+            //get data from above object and call to relevant method (use below code)
 
-            //get response parse and decide on next steps
 
             ErrorCollection errorCollection = null;
             Piece[] pieces = new Piece[0];

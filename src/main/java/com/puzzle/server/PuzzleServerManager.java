@@ -1,5 +1,6 @@
 package com.puzzle.server;
 
+import com.google.gson.JsonObject;
 import com.puzzle.common.entities.Piece;
 import com.puzzle.common.utils.ErrorBuilder;
 import com.puzzle.common.utils.ErrorCollection;
@@ -18,22 +19,22 @@ public class PuzzleServerManager  {
 
 
 
-    public Object startGame(ArrayList<Piece> puzzlePieces) {
+    public JsonObject startGame(ArrayList<Piece> puzzlePieces) {
 
         puzzleValidator = new PuzzleValidator(puzzlePieces);
         boolean isPuzzleCanBeSolved = puzzleValidator.isPuzzleValid();
         if (isPuzzleCanBeSolved) {
-            solvePuzzle(puzzlePieces);
+            return solvePuzzle(puzzlePieces);
         } else {
-            printValidationErrors();
+            return printValidationErrors();
         }
 
-        Object object = new Object();
-        return object;
+
+
 
     }
 
-    private void solvePuzzle(ArrayList<Piece> puzzlePieces) {
+    private JsonObject solvePuzzle(ArrayList<Piece> puzzlePieces) {
         Set<Integer> boardSize = puzzleValidator.getValidNumOfRows();
         boolean solutionFound = false;
         for (Integer numOfLines : boardSize) {
@@ -41,25 +42,29 @@ public class PuzzleServerManager  {
             if (puzzleSolver.tryToSolvePuzzleRectangle()) {
                 Piece[] solutions = puzzleSolver.getResult();
 
-                printPuzzle(solutions, numOfLines);
                 solutionFound = true;
-                break;
+                return printPuzzle(solutions, numOfLines);
+//                break;
             }
         }
         if (!solutionFound) {
-            printSolverErrors();
+            return printSolverErrors();
         }
+        return null;
     }
 
-    private void printSolverErrors() {
+    private JsonObject printSolverErrors() {
         ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.NO_SOLUTION);
         errorCollection.addError(error.getError());
-        //        createJsonObject
+
+        // TODO create json object
+        JsonObject test = new JsonObject();
+        return test;
     }
 
 
 
-    private void printPuzzle(Piece[] pieces, int numOfLines) {
+    private JsonObject printPuzzle(Piece[] pieces, int numOfLines) {
         StringBuffer outPut = new StringBuffer();
         outPut.append(String.format("Solution for %s lines:", numOfLines));
         outPut.append("\n\n");
@@ -71,11 +76,13 @@ public class PuzzleServerManager  {
             }
         }
         System.out.println(outPut.toString());
-//        createJsonObject
+        //TODO create json object
+        JsonObject test = new JsonObject();
+        return test;
     }
 
 
-    private void printValidationErrors() {
+    private JsonObject printValidationErrors() {
         StringBuilder outPut = new StringBuilder();
         List<String> validatorErrors = puzzleValidator.getErrorCollection();
         validatorErrors.stream().forEach(e -> {
@@ -83,7 +90,10 @@ public class PuzzleServerManager  {
             outPut.append("\n");
             System.out.println(e);
         });
-//        createJsonObject
+
+        //TODO create json Object
+        JsonObject test = new JsonObject();
+        return test;
 
     }
 

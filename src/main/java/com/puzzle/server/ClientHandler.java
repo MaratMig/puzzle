@@ -25,8 +25,8 @@ public class ClientHandler extends Thread {
 				PrintStream clientOutput = new PrintStream(socket.getOutputStream(), /* autoflush */ true, "UTF8");) {
 			this.clientOutput = clientOutput;
 			String line = "";
-			System.out.println("Received pieces from: " + clientNum + " is now connected");
-			clientOutput.println("Pieces from clientNum: " + clientNum + " in process now");
+			System.out.println("Client: " + clientNum + " is now connected");
+			clientOutput.println("Pieces from client number " + clientNum + " in process now");
 			while (!line.equals("!")) {
 				line = clientInput.readLine();
 

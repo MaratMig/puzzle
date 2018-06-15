@@ -67,14 +67,21 @@ public class ServerExecutor {
 
 
     public String tryToSolve(String line) {
-//        convertJSONtoObject(line);
+        //TODO convert string from line back to json object
+//       convertJSONtoObject(line);
+        //TODO get list of pices from json object
+        ArrayList<Piece> list = new ArrayList<>();
 
-//        ArrayList<Piece> list = new ArrayList<>();
+        //this code comment out only for testing purpose
 //        PuzzleServerManager puzzleServerManager = new PuzzleServerManager();
-//        Object o = puzzleServerManager.startGame(list);
-        JsonObject person = new JsonObject();
-        person.addProperty("Server", "result");
-        return person.toString();
+//        JsonObject o = puzzleServerManager.startGame(list);
+
+        //this piece of code is for testing purpose only
+        JsonObject test = new JsonObject();
+        test.addProperty("Server", "result");
+        return test.toString();
+
+
 
     }
 }
