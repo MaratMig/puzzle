@@ -3,62 +3,58 @@ package com.puzzle.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Piece {
+public class Piece{
 
     private int id;
+    private PuzzleShape shape;
     private int sum;
-    private int[] sides = new int[4];
+    private boolean isUsed;
 
     public Piece(int id, int[] sides) {
         this.id = id;
-        this.sides = sides;
-        calcSum();
+        shape = new PuzzleShape(sides);
+        sum = shape.calcSum();
+        isUsed = false;
     }
 
     public int getId() {
         return id;
     }
 
+    public boolean isUsed() {
+        return isUsed;
+    }
+
+    public void setUsed(boolean used) {
+        isUsed = used;
+    }
+
     public int getLeft() {
-        return sides[0];
+        return shape.getLeft();
     }
 
     public int getTop() {
-        return sides[1];
+        return shape.getTop();
     }
 
     public int getRight() {
-        return sides[2];
+        return shape.getRight();
     }
 
     public int getBottom() {
-        return sides[3];
+        return shape.getBottom();
+    }
+
+    public PuzzleShape getShape(){
+        return shape;
     }
 
     public int getSum() {
         return sum;
     }
 
-
-    private int calcSum() {
-        this.sum = 0;
-
-        for (int side : sides) {
-            sum += side;
-        }
-        return sum;
-    }
-
-    public List<Integer> getSidesAsList() {
-        List<Integer> sidesNum = new ArrayList<>();
-        for(Integer side: sides){
-            sidesNum.add(side);
-        }
-        return sidesNum;
-    }
-
     @Override
     public String toString() {
-        return "id=" + id +"(" + getLeft() + ", " + getTop()+ ", " + getRight() + ", " + getBottom()+')';
+        return "(" + getLeft() + ", " + getTop()+ ", " + getRight() + ", " + getBottom()+')';
     }
 }

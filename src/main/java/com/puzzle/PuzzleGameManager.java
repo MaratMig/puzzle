@@ -46,8 +46,8 @@ public class PuzzleGameManager implements Runnable {
         boolean solutionFound = false;
         for (Integer numOfLines : boardSize) {
             puzzleSolver = new PuzzleSolver(puzzlePieces, numOfLines);
-            if (puzzleSolver.tryToSolvePuzzleRectangle()) {
-                Piece[] solutions = puzzleSolver.getResult();
+            if (puzzleSolver.tryToSolvePuzzleRectangleSuper()) {
+                Piece[] solutions = puzzleSolver.getSolutionByShapes();
 
                 printPuzzle(solutions, numOfLines);
                 solutionFound = true;
