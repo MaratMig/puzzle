@@ -26,12 +26,13 @@ public class ClientHandler extends Thread {
 			this.clientOutput = clientOutput;
 			String line = "";
 			System.out.println("Received pieces from: " + clientNum + " is now connected");
-			clientOutput.println("Pieces from clientNum: " + clientNum + "in process now");
+			clientOutput.println("Pieces from clientNum: " + clientNum + " in process now");
 			while (!line.equals("!")) {
 				line = clientInput.readLine();
 
 				if (line != null && !line.isEmpty()) {
 
+					System.out.println("This was received from client: " + line);
 					String result = mainServer.tryToSolve(line);
 					System.out.println("RESULT: " + result);
 					clientOutput.println(result);

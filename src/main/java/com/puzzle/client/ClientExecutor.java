@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class ClientExecutor {
-    private final static int THREADS = 4;
+    private final static int THREADS = 1;
 
     public ClientExecutor() {
     }

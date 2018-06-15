@@ -30,7 +30,8 @@ public class PuzzleClientManager implements Runnable {
             person.addProperty("firstName","Yuli");
             //send json to server
             Connector connector = new Connector();
-            connector.connectionToServer(1, person);
+            String result = connector.connectionToServer(1, person);
+            System.out.println(result);
 
 
             //get response parse and decide on next steps

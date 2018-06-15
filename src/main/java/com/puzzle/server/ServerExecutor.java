@@ -73,9 +73,8 @@ public class ServerExecutor {
 //        PuzzleServerManager puzzleServerManager = new PuzzleServerManager();
 //        Object o = puzzleServerManager.startGame(list);
         JsonObject person = new JsonObject();
-        person.addProperty("firstName", "Sergey");
-        person.addProperty("lastName", "Kargopolov");
-        return person.getAsString();
+        person.addProperty("Server", "result");
+        return person.toString();
 
     }
 }

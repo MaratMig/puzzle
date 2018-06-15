@@ -8,7 +8,7 @@ public class MainServer {
 
         ServerConfigManager configManager = new ServerConfigManager();
         configManager.setThreadsNum(1);
-        configManager.setPort(7095);
+        configManager.setPort(7000);
         ServerExecutor serverExecutor = new ServerExecutor();
         serverExecutor.startSever(configManager.getThreadsNum(), configManager.getPort());
     }
