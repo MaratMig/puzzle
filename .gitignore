@@ -6,3 +6,6 @@
 /target/*
 /src/main/resources/outputFile.txt
 /src/main/resources/inputFiles/output/*
+/client/target/*
+/server/target/*
+/common/target/*
