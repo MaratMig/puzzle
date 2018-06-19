@@ -65,7 +65,7 @@ public class PuzzleSolver {
             if (freeToUse.isEmpty()) {
                 return true; //Puzzle is solved
             } else {
-                while (matchingForCurrent.isEmpty() && i>0) {
+                while (matchingForCurrent.isEmpty() && i > 0) {
                     //add it to free list
                     i--;
                     freeToUse.add(result[i]);
@@ -74,12 +74,12 @@ public class PuzzleSolver {
                     result[i] = null;
 
                     //currentPiece = previously added to boardState map
-                    if(i>=1){
-                        Piece currentPiece = result[i-1];
+                    if (i >= 1) {
+                        Piece currentPiece = result[i - 1];
 
                         //currentMatch = boardState.get(id of new currentPiece) (acutally - the previous one))
                         matchingForCurrent = pieceIdToHisMatches.get(currentPiece.getId());
-                    }else{
+                    } else {
                         matchingForCurrent = pieceIdToHisMatches.get(-1);
                     }
                 }
@@ -93,11 +93,11 @@ public class PuzzleSolver {
 
     private List<Piece> findPossibleMatchAccordingToPuzzleForm(int col, List<Piece> freeToUse, int i) {
         List<Piece> matchingForCurrent;
-        if(col==pieces.size()){
+        if (col == pieces.size()) {
             matchingForCurrent = findMatchingInOneLinePuzzle(freeToUse, result, i);
-        }else if(col==1){
+        } else if (col == 1) {
             matchingForCurrent = findMatchingInOneColPuzzle(freeToUse, result, i);
-        }else{
+        } else {
             matchingForCurrent = findMatchingInLines(freeToUse, result, i, col);
         }
         return matchingForCurrent;
@@ -105,30 +105,30 @@ public class PuzzleSolver {
 
     private List<Piece> findFirstPieceAccordingToPuzzleForm(int col) {
         List<Piece> matchingForCurrent;
-        if(col == pieces.size()){
+        if (col == pieces.size()) {
             matchingForCurrent = MatchingUtils.getAllBothTR_BR(pieces);
-        }else if(col==1){
+        } else if (col == 1) {
             matchingForCurrent = MatchingUtils.getAllBothTR_TL(pieces);
-        }else{
+        } else {
             matchingForCurrent = MatchingUtils.getAllMatchingForTL(pieces);
         }
         return matchingForCurrent;
     }
 
-    private List<Piece> findMatchingInOneLinePuzzle(List<Piece> freeToUse, Piece[] board, int place){
+    private List<Piece> findMatchingInOneLinePuzzle(List<Piece> freeToUse, Piece[] board, int place) {
         List<Piece> matchingPieces = new ArrayList<>();
 
         int length = pieces.size();
 
-        if(place<length-1) {
+        if (place < length - 1) {
             matchingPieces = freeToUse.stream()
                     .filter(p -> p.getLeft() + board[place - 1].getRight() == 0 && p.getTop() == 0 && p.getBottom() == 0)
                     .collect(Collectors.toList());
 
         }
-        if(place==length-1){
+        if (place == length - 1) {
             matchingPieces = freeToUse.stream().filter(p ->
-                    p.getLeft() + board[place - 1].getRight() == 0 && p.getTop() == 0 && p.getBottom() == 0 && p.getRight()==0)
+                    p.getLeft() + board[place - 1].getRight() == 0 && p.getTop() == 0 && p.getBottom() == 0 && p.getRight() == 0)
                     .collect(Collectors.toList());
         }
         return matchingPieces;
@@ -140,14 +140,14 @@ public class PuzzleSolver {
 
         int length = pieces.size();
 
-        if(place<length-1) {
-            matchingPieces = freeToUse.stream().filter(p -> p.getTop() + board[place-1].getBottom()==0 && p.getLeft()==0 && p.getRight()==0)
+        if (place < length - 1) {
+            matchingPieces = freeToUse.stream().filter(p -> p.getTop() + board[place - 1].getBottom() == 0 && p.getLeft() == 0 && p.getRight() == 0)
                     .collect(Collectors.toList());
 
         }
-        if(place==length-1){
+        if (place == length - 1) {
             matchingPieces = freeToUse.stream().filter(p ->
-                    p.getTop() + board[place-1].getBottom()==0 && p.getLeft()==0 && p.getRight()==0 && p.getBottom()==0)
+                    p.getTop() + board[place - 1].getBottom() == 0 && p.getLeft() == 0 && p.getRight() == 0 && p.getBottom() == 0)
                     .collect(Collectors.toList());
         }
         return matchingPieces;
@@ -183,11 +183,11 @@ public class PuzzleSolver {
         return matchingPieces;
     }
 
-    private boolean isNoAnyMatches(Map<Integer, List<Piece>> matchingPieces){
+    private boolean isNoAnyMatches(Map<Integer, List<Piece>> matchingPieces) {
 
-        for(Map.Entry entry: matchingPieces.entrySet()){
+        for (Map.Entry entry : matchingPieces.entrySet()) {
             List<Piece> matchingPiecesList = (List<Piece>) entry.getValue();
-            if(!matchingPiecesList.isEmpty()){
+            if (!matchingPiecesList.isEmpty()) {
                 return false;
             }
         }

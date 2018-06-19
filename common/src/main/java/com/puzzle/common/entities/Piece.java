@@ -33,8 +33,6 @@ public class Piece {
         return piece[3];
     }
 
-
-
     public int getSum() {
         int sum = 0;
 

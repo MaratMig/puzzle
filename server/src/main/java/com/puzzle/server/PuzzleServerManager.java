@@ -20,8 +20,6 @@ public class PuzzleServerManager  {
     private PuzzleSolver puzzleSolver;
     private ErrorCollection errorCollection= new ErrorCollection();;
 
-
-
     public PuzzleSolution startGame(List<Piece> puzzlePieces) {
 
         puzzleValidator = new PuzzleValidator(puzzlePieces);

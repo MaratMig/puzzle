@@ -2,7 +2,8 @@ package com.puzzle.common.jsonPojo;
 
 public class ServerResponse {
 
-    PuzzleSolution puzzleSolution;
+    private PuzzleSolution puzzleSolution;
+    private PuzzleReceived puzzleReceived;
 
     public ServerResponse(PuzzleSolution puzzleSolution) {
         this.puzzleSolution = puzzleSolution;
@@ -14,5 +15,18 @@ public class ServerResponse {
 
     public void setPuzzleSolution(PuzzleSolution puzzleSolution) {
         this.puzzleSolution = puzzleSolution;
+    }
+
+
+    public ServerResponse(PuzzleReceived puzzleReceived) {
+        this.puzzleReceived = puzzleReceived;
+    }
+
+    public PuzzleReceived getPuzzleReceived() {
+        return puzzleReceived;
+    }
+
+    public void setPuzzleReceived(PuzzleReceived puzzleReceived) {
+        this.puzzleReceived = puzzleReceived;
     }
 }

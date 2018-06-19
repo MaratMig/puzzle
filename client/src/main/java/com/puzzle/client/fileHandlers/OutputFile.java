@@ -21,7 +21,6 @@ public class OutputFile {
 
     }
 
-
     public void writeResultToFile(Path fileName, String str) {
 
         String outputFileName = fileName.getFileName().toString().replace(".txt", ".output");

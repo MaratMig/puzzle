@@ -1,11 +1,8 @@
 package com.puzzle.server;
 
 
-import com.google.gson.Gson;
 import com.puzzle.common.entities.Piece;
-import com.puzzle.common.jsonPojo.ClientRequest;
 import com.puzzle.common.jsonPojo.PuzzleSolution;
-import com.puzzle.common.jsonPojo.ServerResponse;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -25,8 +22,6 @@ public class ServerExecutor {
 
     public ServerExecutor() {
     }
-
-
 
     public void startSever(int threads, int port) throws InterruptedException {
         ExecutorService executor = Executors.newFixedThreadPool(threads);
@@ -58,7 +53,7 @@ public class ServerExecutor {
                 }
                 if (killTheServer.get()) {
                     System.out.println("server shutdown normally");
-                }else {
+                } else {
                     e1.printStackTrace();
                 }
             }
@@ -71,19 +66,12 @@ public class ServerExecutor {
     }
 
 
-    public String tryToSolve(String line) {
-        //TODO convert string from line back to json object
-//       convert JSON to Object
-        Gson gson = new Gson();
-        ClientRequest clientRequest = gson.fromJson(line, ClientRequest.class);
-        List<Piece> pieces = clientRequest.getPieces().getPieces();
+    public PuzzleSolution tryToSolve(List<Piece> piecesList) {
 
         //start solving and return the result
         PuzzleServerManager puzzleServerManager = new PuzzleServerManager();
-        PuzzleSolution result = puzzleServerManager.startGame(pieces);
-        ServerResponse serverResponse = new ServerResponse(result);
-        Gson gsonResult = new Gson();
-        String resultString = gsonResult.toJson(serverResponse);
-        return resultString;
+        PuzzleSolution result = puzzleServerManager.startGame(piecesList);
+
+        return result;
     }
 }

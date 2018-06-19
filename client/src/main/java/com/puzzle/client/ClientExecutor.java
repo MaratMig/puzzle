@@ -29,7 +29,7 @@ public class ClientExecutor {
 
     private void multiThreadedGame(List<Path> fileList) throws InterruptedException {
         ExecutorService executor = Executors.newFixedThreadPool(THREADS);
-        for (int i = 0; i < fileList.size() ; i++) {
+        for (int i = 0; i < fileList.size(); i++) {
             Runnable worker = new PuzzleClientManager(fileList.get(i));
             executor.execute(worker);
         }
@@ -38,7 +38,6 @@ public class ClientExecutor {
         System.out.println("Game Over !!!");
 
     }
-
 
 
 }

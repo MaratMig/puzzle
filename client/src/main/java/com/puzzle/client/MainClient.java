@@ -18,7 +18,7 @@ public class MainClient {
         conf.setIp(ip);
         try {
             conf.setPort(Integer.valueOf(port));
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("port value should be numeric");
             System.exit(0);
         }

@@ -35,7 +35,7 @@ public class PuzzleClientManager implements Runnable {
 
             //send json to server
             Connector connector = new Connector();
-            String result = connector.connectionToServer(1, jsonForSending);
+            String result = connector.connectionToServer(jsonForSending);
             ServerResponse serverResponse = new Gson().fromJson(result, ServerResponse.class);
 
             if (serverResponse.getPuzzleSolution().isSolutionExists()) {
@@ -74,7 +74,6 @@ public class PuzzleClientManager implements Runnable {
         System.out.println(outPut.toString());
         outPutFile.writeResultToFile(fileToHandle, outPut.toString());
     }
-
 
     private void printServerErrors(ErrorCollection errorCollection) {
         List<String> inputValidationErrors = errorCollection.getErrors();
@@ -119,11 +118,8 @@ public class PuzzleClientManager implements Runnable {
         return puzzelPiecesInput;
     }
 
-
-
     @Override
     public void run() {
         startClient();
     }
-
 }

@@ -17,7 +17,6 @@ public class ServerConfigManager {
         return INSTANCE;
     }
 
-
     public static int getThreadsNum() {
         return threadsNum;
     }
