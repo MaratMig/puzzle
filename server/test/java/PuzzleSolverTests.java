@@ -1,5 +1,5 @@
+import com.puzzle.common.entities.Piece;
 import com.puzzle.server.PuzzleSolver;
-import com.puzzle.utils.entities.Piece;
 import org.junit.Test;
 
 import java.util.ArrayList;

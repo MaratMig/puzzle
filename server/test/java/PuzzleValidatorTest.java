@@ -1,6 +1,6 @@
+import com.puzzle.common.entities.Corner;
+import com.puzzle.common.entities.Piece;
 import com.puzzle.server.PuzzleValidator;
-import com.puzzle.utils.entities.Corner;
-import com.puzzle.utils.entities.Piece;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

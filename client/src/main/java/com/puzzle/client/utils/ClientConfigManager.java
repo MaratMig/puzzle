@@ -2,34 +2,43 @@ package com.puzzle.client.utils;
 
 public class ClientConfigManager {
 
-    private String inputPath;
-    private String ip;
-    private int port;
+    private static ClientConfigManager INSTANCE;
+    private static String inputPath;
+    private static String ip;
+    private static int port;
 
-    public ClientConfigManager() {
+    private ClientConfigManager() {
     }
 
-    public String getInputPath() {
+    public static ClientConfigManager getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new ClientConfigManager();
+        }
+
+        return INSTANCE;
+    }
+
+    public static String getInputPath() {
         return inputPath;
     }
 
-    public void setInputPath(String inputPath) {
-        this.inputPath = inputPath;
+    public static void setInputPath(String inputPath) {
+        ClientConfigManager.inputPath = inputPath;
     }
 
-    public String getIp() {
+    public static String getIp() {
         return ip;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
+    public static void setIp(String ip) {
+        ClientConfigManager.ip = ip;
     }
 
-    public int getPort() {
+    public static int getPort() {
         return port;
     }
 
-    public void setPort(int port) {
-        this.port = port;
+    public static void setPort(int port) {
+        ClientConfigManager.port = port;
     }
 }

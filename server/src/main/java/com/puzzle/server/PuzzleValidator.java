@@ -1,10 +1,10 @@
 package com.puzzle.server;
 
-import com.puzzle.utils.entities.Corner;
-import com.puzzle.utils.entities.Piece;
-import com.puzzle.utils.utils.ErrorBuilder;
-import com.puzzle.utils.utils.ErrorCollection;
-import com.puzzle.utils.utils.ErrorTypeEnum;
+import com.puzzle.common.entities.Corner;
+import com.puzzle.common.entities.Piece;
+import com.puzzle.common.utils.ErrorBuilder;
+import com.puzzle.common.utils.ErrorCollection;
+import com.puzzle.common.utils.ErrorTypeEnum;
 import org.apache.commons.math3.primes.Primes;
 import org.apache.commons.math3.util.Combinations;
 

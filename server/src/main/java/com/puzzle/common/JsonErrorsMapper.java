@@ -1,4 +1,4 @@
-package com.puzzle.utils;
+package com.puzzle.common;
 
 
 import com.google.gson.JsonArray;

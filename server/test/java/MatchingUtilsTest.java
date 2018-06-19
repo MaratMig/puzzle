@@ -1,5 +1,5 @@
-import com.puzzle.utils.MatchingUtils;
-import com.puzzle.utils.entities.Piece;
+import com.puzzle.common.MatchingUtils;
+import com.puzzle.common.entities.Piece;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

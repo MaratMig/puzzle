@@ -1,7 +1,7 @@
 package com.puzzle.server;
 
-import com.puzzle.utils.MatchingUtils;
-import com.puzzle.utils.entities.Piece;
+import com.puzzle.common.MatchingUtils;
+import com.puzzle.common.entities.Piece;
 
 import java.util.ArrayList;
 import java.util.HashMap;

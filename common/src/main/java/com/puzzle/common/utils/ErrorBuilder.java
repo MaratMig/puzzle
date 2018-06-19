@@ -1,4 +1,4 @@
-package com.puzzle.utils.utils;
+package com.puzzle.common.utils;
 
 public class ErrorBuilder {
 

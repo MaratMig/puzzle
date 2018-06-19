@@ -1,4 +1,4 @@
-package com.puzzle.utils.entities;
+package com.puzzle.common.entities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,13 +6,11 @@ import java.util.List;
 public class Piece {
 
     private int id;
-    private int sum;
-    private int[] sides = new int[4];
+    private int[] piece = new int[4];
 
-    public Piece(int id, int[] sides) {
+    public Piece(int id, int[] piece) {
         this.id = id;
-        this.sides = sides;
-        calcSum();
+        this.piece = piece;
     }
 
     public int getId() {
@@ -20,30 +18,27 @@ public class Piece {
     }
 
     public int getLeft() {
-        return sides[0];
+        return piece[0];
     }
 
     public int getTop() {
-        return sides[1];
+        return piece[1];
     }
 
     public int getRight() {
-        return sides[2];
+        return piece[2];
     }
 
     public int getBottom() {
-        return sides[3];
+        return piece[3];
     }
+
+
 
     public int getSum() {
-        return sum;
-    }
+        int sum = 0;
 
-
-    private int calcSum() {
-        this.sum = 0;
-
-        for (int side : sides) {
+        for (int side : piece) {
             sum += side;
         }
         return sum;
@@ -51,7 +46,7 @@ public class Piece {
 
     public List<Integer> getSidesAsList() {
         List<Integer> sidesNum = new ArrayList<>();
-        for(Integer side: sides){
+        for(Integer side: piece){
             sidesNum.add(side);
         }
         return sidesNum;

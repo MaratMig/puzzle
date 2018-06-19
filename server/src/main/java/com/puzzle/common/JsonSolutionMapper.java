@@ -1,9 +1,9 @@
-package com.puzzle.utils;
+package com.puzzle.common;
 
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.puzzle.utils.entities.Piece;
+import com.puzzle.common.entities.Piece;
 
 import java.util.Arrays;
 

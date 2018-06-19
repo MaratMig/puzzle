@@ -1,14 +1,17 @@
 package com.puzzle.server;
 
 
-
-import com.google.gson.JsonObject;
-import com.puzzle.utils.entities.Piece;
+import com.google.gson.Gson;
+import com.puzzle.common.entities.Piece;
+import com.puzzle.common.jsonPojo.ClientRequest;
+import com.puzzle.common.jsonPojo.PuzzleSolution;
+import com.puzzle.common.jsonPojo.ServerResponse;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -30,7 +33,7 @@ public class ServerExecutor {
         int ClientNum = 1;
 
         try {
-            server = new ServerSocket(7000);
+            server = new ServerSocket(port);
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -70,17 +73,17 @@ public class ServerExecutor {
 
     public String tryToSolve(String line) {
         //TODO convert string from line back to json object
-//       convertJSONtoObject(line);
-        //TODO get list of pices from json object
-        ArrayList<Piece> list = new ArrayList<>();
+//       convert JSON to Object
+        Gson gson = new Gson();
+        ClientRequest clientRequest = gson.fromJson(line, ClientRequest.class);
+        List<Piece> pieces = clientRequest.getPieces().getPieces();
 
-        //this code comment out only for testing purpose
-//        PuzzleServerManager puzzleServerManager = new PuzzleServerManager();
-//        JsonObject o = puzzleServerManager.startGame(list);
-
-        //this piece of code is for testing purpose only
-        JsonObject test = new JsonObject();
-        test.addProperty("Server", "result");
-        return test.toString();
+        //start solving and return the result
+        PuzzleServerManager puzzleServerManager = new PuzzleServerManager();
+        PuzzleSolution result = puzzleServerManager.startGame(pieces);
+        ServerResponse serverResponse = new ServerResponse(result);
+        Gson gsonResult = new Gson();
+        String resultString = gsonResult.toJson(serverResponse);
+        return resultString;
     }
 }

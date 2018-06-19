@@ -2,7 +2,7 @@ package com.puzzle.client.utils;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.puzzle.utils.entities.Piece;
+import com.puzzle.common.entities.Piece;
 
 import java.util.List;
 
