@@ -12,9 +12,11 @@ public class MainClient {
         System.out.println("Client ip: " + ip);
         String port = System.getProperty("port", "7095");
         System.out.println("Client port: " + port);
+        String inputPath = System.getProperty("inputPath", "client/src/main/resources/inputFiles");
+        System.out.println("InputPath: " + inputPath);
 
         ClientConfigManager conf = ClientConfigManager.getInstance();
-        conf.setInputPath("C:\\Git_work\\puzzle\\puzzle\\client\\src\\main\\resources\\inputFiles");
+        conf.setInputPath(inputPath);
         conf.setIp(ip);
         try {
             conf.setPort(Integer.valueOf(port));

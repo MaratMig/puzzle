@@ -3,7 +3,6 @@ package com.puzzle.server;
 
 import com.puzzle.common.entities.Piece;
 import com.puzzle.common.jsonPojo.PuzzleSolution;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
