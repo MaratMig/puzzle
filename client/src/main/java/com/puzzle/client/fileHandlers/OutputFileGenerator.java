@@ -1,20 +1,21 @@
 package com.puzzle.client.fileHandlers;
 
+import com.puzzle.client.utils.ClientConfigManager;
+
 import java.io.*;
 import java.nio.file.Path;
 
-public class OutputFile {
+public class OutputFileGenerator {
 
-    private Path outPutPath;
+    private String outPutPath;
 
-    public OutputFile(Path outPutPath) {
-        this.outPutPath = outPutPath;
+    public OutputFileGenerator() {
+        this.outPutPath = ClientConfigManager.getOutputPath();
         createOutputFolder();
     }
 
     private void createOutputFolder() {
-        Path outputFolder = outPutPath.getParent().resolve("output");
-        File directory = new File(String.valueOf(outputFolder));
+        File directory = new File(outPutPath);
         if (!directory.exists()) {
             directory.mkdir();
         }
@@ -25,7 +26,7 @@ public class OutputFile {
 
         String outputFileName = fileName.getFileName().toString().replace(".txt", ".output");
 
-        try (FileOutputStream fos = new FileOutputStream(outPutPath.resolve(outputFileName).toString());
+        try (FileOutputStream fos = new FileOutputStream(outPutPath + File.separator + outputFileName);
              OutputStreamWriter writer = new OutputStreamWriter(fos)) {
 
             writer.write(str);

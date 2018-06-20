@@ -10,8 +10,6 @@ import java.net.Socket;
 
 public class Connector {
 
-    public Connector() {
-    }
 
     public String connectionToServer(String json) {
 
@@ -21,7 +19,6 @@ public class Connector {
               PrintStream socketOutput = new PrintStream(socket.getOutputStream(), /* autoflush */ true, "UTF8");) {
             // Thread for handling server input
 
-            try {
 
                 socketOutput.println(json);
                 System.out.println(socketInput.readLine());
@@ -29,13 +26,9 @@ public class Connector {
                 socketOutput.println("!");
                 return serverResult;
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
         } catch (IOException e) {
-
+            throw new RuntimeException("connection to server failed- " + e );
         }
-        return null;
+
     }
 }

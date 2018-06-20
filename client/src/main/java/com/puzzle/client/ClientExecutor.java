@@ -13,8 +13,6 @@ import java.util.stream.Collectors;
 public class ClientExecutor {
     private final static int THREADS = 4;
 
-    public ClientExecutor() {
-    }
 
     public void startGames(String path) throws IOException, InterruptedException {
         List<Path> fileList = readFilesFromDir(path);

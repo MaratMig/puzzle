@@ -4,6 +4,7 @@ public class ClientConfigManager {
 
     private static ClientConfigManager INSTANCE;
     private static String inputPath;
+    private static String outputPath;
     private static String ip;
     private static int port;
 
@@ -40,5 +41,13 @@ public class ClientConfigManager {
 
     public static void setPort(int port) {
         ClientConfigManager.port = port;
+    }
+
+    public static String getOutputPath() {
+        return outputPath;
+    }
+
+    public static void setOutputPath(String outputPath) {
+        ClientConfigManager.outputPath = outputPath;
     }
 }

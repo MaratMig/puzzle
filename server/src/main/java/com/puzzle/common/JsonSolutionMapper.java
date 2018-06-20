@@ -1,6 +1,5 @@
 package com.puzzle.common;
 
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.puzzle.common.entities.Piece;

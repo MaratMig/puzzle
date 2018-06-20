@@ -2,6 +2,8 @@ package com.puzzle.client;
 
 import com.puzzle.client.utils.ClientConfigManager;
 
+import java.io.File;
+
 public class MainClient {
 
     public static void main(String[] args) throws Exception {
@@ -14,9 +16,12 @@ public class MainClient {
         System.out.println("Client port: " + port);
         String inputPath = System.getProperty("inputPath", "client/src/main/resources/inputFiles");
         System.out.println("InputPath: " + inputPath);
+        String outputPath = System.getProperty("inputPath", inputPath + File.separator + "output");
+        System.out.println("OutputPath: " + outputPath);
 
         ClientConfigManager conf = ClientConfigManager.getInstance();
         conf.setInputPath(inputPath);
+        conf.setOutputPath(outputPath);
         conf.setIp(ip);
         try {
             conf.setPort(Integer.valueOf(port));

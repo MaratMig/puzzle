@@ -1,7 +1,5 @@
 package com.puzzle.server;
 
-
-
 import com.puzzle.common.entities.Piece;
 import com.puzzle.common.jsonPojo.PuzzleSolution;
 import com.puzzle.common.jsonPojo.Solution;
