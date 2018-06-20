@@ -57,6 +57,14 @@ public class Piece {
         return sidesNum;
     }
 
+    public Shape getShape() {
+        return new Shape(sides);
+    }
+
+    public String getLeftTopKey(){
+        return String.valueOf(getLeft())+String.valueOf(getTop());
+    }
+
     @Override
     public String toString() {
         return "id=" + id +"(" + getLeft() + ", " + getTop()+ ", " + getRight() + ", " + getBottom()+')';
