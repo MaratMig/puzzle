@@ -16,7 +16,7 @@ public class MainClient {
         System.out.println("Client port: " + port);
         String inputPath = System.getProperty("inputPath", "client/src/main/resources/inputFiles");
         System.out.println("InputPath: " + inputPath);
-        String outputPath = System.getProperty("inputPath", inputPath + File.separator + "output");
+        String outputPath = System.getProperty("outputPath", inputPath + File.separator + "output");
         System.out.println("OutputPath: " + outputPath);
 
         ClientConfigManager conf = ClientConfigManager.getInstance();
