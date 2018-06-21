@@ -17,7 +17,7 @@ public enum ErrorTypeEnum {
 
     private String errorMessage;
 
-    private ErrorTypeEnum(String value) {
+    ErrorTypeEnum(String value) {
         this.errorMessage = value;
     }
 

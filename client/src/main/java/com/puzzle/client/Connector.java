@@ -23,6 +23,9 @@ public class Connector {
                 socketOutput.println(json);
                 System.out.println(socketInput.readLine());
                 String serverResult = socketInput.readLine();
+                    if (serverResult == null) {
+                        throw new RuntimeException("server could not handle request");
+                    }
                 socketOutput.println("!");
                 return serverResult;
 

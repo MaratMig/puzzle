@@ -13,15 +13,13 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PuzzleClientManager implements Runnable {
+public class PuzzleClientRunner implements Runnable {
     private Path fileToHandle;
     private Parser parser;
-    private OutputFileGenerator outPutFileGenerator;
 
 
-    public PuzzleClientManager(Path fileToHandle) {
+    public PuzzleClientRunner(Path fileToHandle) {
         this.fileToHandle = fileToHandle;
-        outPutFileGenerator = new OutputFileGenerator();
     }
 
     public void startClient() {
@@ -35,10 +33,13 @@ public class PuzzleClientManager implements Runnable {
             //send json to server
             Connector connector = new Connector();
             String result = connector.connectionToServer(jsonForSending);
-            if (result == null) {
-                throw new RuntimeException("server could not handle request");
+            ServerResponse serverResponse = null;
+            try {
+                serverResponse = new Gson().fromJson(result, ServerResponse.class);
+            }catch (Exception e){
+                throw new RuntimeException("client could not parse server response");
             }
-            ServerResponse serverResponse = new Gson().fromJson(result, ServerResponse.class);
+
 
             if (serverResponse.getPuzzleSolution().isSolutionExists()) {
                 int numOfLines = serverResponse.getPuzzleSolution().getSolution().getRows();
@@ -60,7 +61,7 @@ public class PuzzleClientManager implements Runnable {
             outPut.append("\n");
             System.out.println(e);
         });
-        outPutFileGenerator.writeResultToFile(fileToHandle, outPut.toString());
+        writeToOutPutFile(fileToHandle, outPut.toString());
     }
 
     private void printPuzzleSolution(List<Piece> pieces, int numOfLines) {
@@ -77,7 +78,7 @@ public class PuzzleClientManager implements Runnable {
             }
         }
         System.out.println(outPut.toString());
-        outPutFileGenerator.writeResultToFile(fileToHandle, outPut.toString());
+        writeToOutPutFile(fileToHandle, outPut.toString());
     }
 
     private void printParserErrors() {
@@ -89,7 +90,12 @@ public class PuzzleClientManager implements Runnable {
             outPut.append("\n");
             System.out.println(e);
         });
-        outPutFileGenerator.writeResultToFile(fileToHandle, outPut.toString());
+        writeToOutPutFile(fileToHandle, outPut.toString());
+    }
+
+    private void writeToOutPutFile(Path fileToHandle, String str) {
+        OutputFileGenerator outPutFileGenerator = new OutputFileGenerator();
+        outPutFileGenerator.writeResultToFile(fileToHandle, str);
     }
 
     private ArrayList<Piece> startParser() {

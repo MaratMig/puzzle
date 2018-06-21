@@ -8,7 +8,7 @@ public class MainClient {
 
     public static void main(String[] args) throws Exception {
 
-        System.out.println("Please note that ip and port values can be override by System property");
+        System.out.println("Please note that ip, port, Input and Output values can be override by System property");
 
         String ip = System.getProperty("ip", "127.0.0.1");
         System.out.println("Client ip: " + ip);
@@ -30,6 +30,7 @@ public class MainClient {
             System.exit(0);
         }
 
+        System.out.println("<<< CLIENT STARTED >>>\n");
         ClientExecutor clientExecutor = new ClientExecutor();
         clientExecutor.startGames(conf.getInputPath());
     }
