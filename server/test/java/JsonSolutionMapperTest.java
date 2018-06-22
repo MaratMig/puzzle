@@ -1,6 +1,6 @@
 import com.google.gson.JsonObject;
-import com.puzzle.utils.JsonSolutionMapper;
-import com.puzzle.utils.entities.Piece;
+import com.puzzle.common.JsonSolutionMapper;
+import com.puzzle.common.entities.Piece;
 import org.junit.jupiter.api.Test;
 
 class JsonSolutionMapperTest {

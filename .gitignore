@@ -9,3 +9,4 @@
 /client/target/*
 /server/target/*
 /common/target/*
+/client/src/main/resources/inputFiles/output/*

@@ -1,14 +1,12 @@
 package com.puzzle.server;
 
-
-
-import com.google.gson.JsonObject;
-import com.puzzle.utils.entities.Piece;
-
+import com.puzzle.common.entities.Piece;
+import com.puzzle.common.jsonPojo.PuzzleSolution;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -23,14 +21,12 @@ public class ServerExecutor {
     public ServerExecutor() {
     }
 
-
-
     public void startSever(int threads, int port) throws InterruptedException {
         ExecutorService executor = Executors.newFixedThreadPool(threads);
         int ClientNum = 1;
 
         try {
-            server = new ServerSocket(7000);
+            server = new ServerSocket(port);
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -55,7 +51,7 @@ public class ServerExecutor {
                 }
                 if (killTheServer.get()) {
                     System.out.println("server shutdown normally");
-                }else {
+                } else {
                     e1.printStackTrace();
                 }
             }
@@ -68,19 +64,12 @@ public class ServerExecutor {
     }
 
 
-    public String tryToSolve(String line) {
-        //TODO convert string from line back to json object
-//       convertJSONtoObject(line);
-        //TODO get list of pices from json object
-        ArrayList<Piece> list = new ArrayList<>();
+    public PuzzleSolution tryToSolve(List<Piece> piecesList) {
 
-        //this code comment out only for testing purpose
-//        PuzzleServerManager puzzleServerManager = new PuzzleServerManager();
-//        JsonObject o = puzzleServerManager.startGame(list);
+        //start solving and return the result
+        PuzzleServerManager puzzleServerManager = new PuzzleServerManager();
+        PuzzleSolution result = puzzleServerManager.startGame(piecesList);
 
-        //this piece of code is for testing purpose only
-        JsonObject test = new JsonObject();
-        test.addProperty("Server", "result");
-        return test.toString();
+        return result;
     }
 }

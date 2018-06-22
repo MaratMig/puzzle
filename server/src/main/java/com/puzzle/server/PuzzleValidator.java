@@ -1,10 +1,10 @@
 package com.puzzle.server;
 
-import com.puzzle.utils.entities.Corner;
-import com.puzzle.utils.entities.Piece;
-import com.puzzle.utils.utils.ErrorBuilder;
-import com.puzzle.utils.utils.ErrorCollection;
-import com.puzzle.utils.utils.ErrorTypeEnum;
+import com.puzzle.common.entities.Corner;
+import com.puzzle.common.entities.Piece;
+import com.puzzle.common.utils.ErrorBuilder;
+import com.puzzle.common.utils.ErrorCollection;
+import com.puzzle.common.utils.ErrorTypeEnum;
 import org.apache.commons.math3.primes.Primes;
 import org.apache.commons.math3.util.Combinations;
 
@@ -13,7 +13,8 @@ import java.util.*;
 public class PuzzleValidator {
 
     private List<Piece> pieces;
-    private ErrorCollection errorCollection = new ErrorCollection();;
+    private ErrorCollection errorCollection = new ErrorCollection();
+    ;
 
     public PuzzleValidator(List<Piece> pieces) {
         this.pieces = pieces;
@@ -49,12 +50,12 @@ public class PuzzleValidator {
         List<Integer> factors = new ArrayList<>();
         factors.addAll(Primes.primeFactors(numOfPieces));
 
-        for(int i=1; i<factors.size();i++){
+        for (int i = 1; i < factors.size(); i++) {
             Combinations combinations = new Combinations(factors.size(), i);
             Iterator<int[]> iterator = combinations.iterator();
-            while (iterator.hasNext()){
+            while (iterator.hasNext()) {
                 int[] combination = iterator.next();
-                int multiple = Arrays.stream(combination).map(k->factors.get(k)).reduce(1, (f1, f2) -> f1*f2);
+                int multiple = Arrays.stream(combination).map(k -> factors.get(k)).reduce(1, (f1, f2) -> f1 * f2);
                 possibleNumberOfLines.add(multiple);
             }
         }
@@ -166,18 +167,18 @@ public class PuzzleValidator {
             errorCollection.addError(error.getError());
             result = false;
         }
-        if (!isValidNumberOfStraitSides() || getValidNumOfRows().isEmpty()){
+        if (!isValidNumberOfStraitSides() || getValidNumOfRows().isEmpty()) {
             ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.WRONG_NUM_STRAIGHTS);
             errorCollection.addError(error.getError());
             result = false;
         }
-        if(!isSumOfRightAndLeftSidesZero()){
+        if (!isSumOfRightAndLeftSidesZero()) {
             ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.SUM_LR_NOT_ZERO);
             errorCollection.addError(error.getError());
             result = false;
         }
 
-        if(!isSumOfTopAndBottomSidesZero()){
+        if (!isSumOfTopAndBottomSidesZero()) {
             ErrorBuilder error = new ErrorBuilder(ErrorTypeEnum.SUM_TB_NOT_ZERO);
             errorCollection.addError(error.getError());
             result = false;
@@ -192,5 +193,5 @@ public class PuzzleValidator {
             result = false;
         }
         return result;
-        }
+    }
 }

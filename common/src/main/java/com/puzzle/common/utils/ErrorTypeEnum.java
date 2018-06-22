@@ -1,4 +1,4 @@
-package com.puzzle.utils.utils;
+package com.puzzle.common.utils;
 
 public enum ErrorTypeEnum {
     MISSING_ELEMENTS("Missing puzzle element(s) with the following IDs: %s"),
@@ -17,7 +17,7 @@ public enum ErrorTypeEnum {
 
     private String errorMessage;
 
-    private ErrorTypeEnum(String value) {
+    ErrorTypeEnum(String value) {
         this.errorMessage = value;
     }
 

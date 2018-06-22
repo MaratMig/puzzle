@@ -11,10 +11,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class ClientExecutor {
-    private final static int THREADS = 1;
+    private final static int THREADS = 4;
 
-    public ClientExecutor() {
-    }
 
     public void startGames(String path) throws IOException, InterruptedException {
         List<Path> fileList = readFilesFromDir(path);
@@ -29,8 +27,8 @@ public class ClientExecutor {
 
     private void multiThreadedGame(List<Path> fileList) throws InterruptedException {
         ExecutorService executor = Executors.newFixedThreadPool(THREADS);
-        for (int i = 0; i < fileList.size() ; i++) {
-            Runnable worker = new PuzzleClientManager(fileList.get(i));
+        for (int i = 0; i < fileList.size(); i++) {
+            Runnable worker = new PuzzleClientRunner(fileList.get(i));
             executor.execute(worker);
         }
         executor.shutdown();
@@ -38,7 +36,6 @@ public class ClientExecutor {
         System.out.println("Game Over !!!");
 
     }
-
 
 
 }
