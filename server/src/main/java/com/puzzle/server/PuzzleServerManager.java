@@ -10,6 +10,7 @@ import com.puzzle.utils.utils.ErrorBuilder;
 import com.puzzle.utils.utils.ErrorCollection;
 import com.puzzle.utils.utils.ErrorTypeEnum;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -38,11 +39,11 @@ public class PuzzleServerManager  {
         boolean solutionFound = false;
         for (Integer numOfLines : boardSize) {
             puzzleSolver = new PuzzleSolver(puzzlePieces, numOfLines);
-            if (puzzleSolver.tryToSolvePuzzleRectangle()) {
-                Piece[] solutions = puzzleSolver.getResult();
+            if (puzzleSolver.tryToSolvePuzzleRectangleNew()) {
+                //Piece[] solutions = puzzleSolver.getResult();
 
                 solutionFound = true;
-                return printPuzzle(solutions, numOfLines);
+                //return printPuzzle(solutions, numOfLines);
 //                break;
             }
         }
@@ -93,6 +94,14 @@ public class PuzzleServerManager  {
         //TODO create json Object - review
         JsonErrorsMapper errorsMapper = new JsonErrorsMapper(validatorErrors);
         return  errorsMapper.getErrorsAsJson();
+    }
+
+    public static void main(String[] args){
+        com.puzzle.server.Parser puzzleParser = new com.puzzle.server.Parser(Paths.get("C:\\Ella\\solvable5x8_2.txt"));
+
+        PuzzleServerManager puzzleServerManager = new PuzzleServerManager();
+        puzzleServerManager.startGame(puzzleParser.parse());
+
     }
 }
 

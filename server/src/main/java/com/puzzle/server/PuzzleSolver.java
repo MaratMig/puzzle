@@ -2,6 +2,7 @@ package com.puzzle.server;
 
 import com.puzzle.utils.MatchingUtils;
 import com.puzzle.utils.entities.Piece;
+import com.puzzle.utils.entities.Shape;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,15 +15,39 @@ public class PuzzleSolver {
     List<Piece> pieces;
     Integer numOfLines;
     Piece[] result;
+    private SolveHelper solveHelper;
 
     public PuzzleSolver(List<Piece> pieceList, Integer numOfLines) {
         this.pieces = pieceList;
         this.result = new Piece[pieces.size()];
         this.numOfLines = numOfLines;
+        solveHelper = new SolveHelper(pieces);
     }
 
     public Piece[] getResult() {
         return result;
+    }
+
+    private List<Integer> createSolutionAsListOfIds(Shape[] solutionInShapes){
+        Map<Shape, List<Integer>> existingShapesToIds = solveHelper.getExistingShapesToIds();
+        List<Integer> ids = new ArrayList<>();
+
+        int rows = numOfLines + 1;
+        int columns = pieces.size() / numOfLines + 1;
+
+        for(int i =0; i<rows*columns; i++){
+            if(i>columns && i%columns!=0){
+                Integer id = existingShapesToIds.get(solutionInShapes[i]).get(0);
+                ids.add(id);
+
+                List<Integer> idsOfShape = existingShapesToIds.get(solutionInShapes[i]);
+                idsOfShape.remove(id);
+
+                existingShapesToIds.put(solutionInShapes[i], idsOfShape);
+            }
+        }
+
+        return ids;
     }
 
     public boolean tryToSolvePuzzleRectangle() {
@@ -192,5 +217,15 @@ public class PuzzleSolver {
             }
         }
         return true;
+    }
+
+    public boolean tryToSolvePuzzleRectangleNew() {
+        if(solveHelper.tryToSolvePuzzleInShapes(numOfLines)){
+            List<Integer> solutionIds = createSolutionAsListOfIds(solveHelper.getResultEnlarged());
+            solutionIds.stream().forEach(id->System.out.println(id+" "));
+            return true;
+        }else {
+            return false;
+        }
     }
 }
