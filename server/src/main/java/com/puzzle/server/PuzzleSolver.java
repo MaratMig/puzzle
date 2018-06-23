@@ -45,11 +45,13 @@ public class PuzzleSolver {
 
         int columns = pieces.size() / numOfLines + 1;
 
+        int resultIndex=0;
         for(int i =0; i<resultEnlarged.length; i++){
             if(i>columns && i%columns!=0){ //avoid added strait pieces
                 List<Piece> matchingPieces = existingShapesToPieces.get(solutionInShapes[i]);
-                result[i] = matchingPieces.get(0);
-                matchingPieces.remove(result[i]);
+                result[resultIndex] = matchingPieces.get(0);
+                matchingPieces.remove(result[resultIndex]);
+                resultIndex++;
             }
         }
     }
@@ -275,13 +277,16 @@ public class PuzzleSolver {
                     counter++;
                     //In case of continues forward-backward steps in the same place, return several steps backward
                     //to increase a chance of selecting different path
-                    if(counter>3){
+                    if(bigPuzzleSize> 20 && counter>3){
                         int numOfBackSteps = Math.min(5, place - (col + 1)); // it's impossible to step back more than first place in the original puzzle
                         for(int i=0; i<numOfBackSteps; i++){
                             place = solveHelper.previousPlace(place, col);
                             solveHelper.returnPreviousChoiceToIndex(resultEnlarged[place], indexOfShapes);
                             resultEnlarged[place] = null;
-                            matchingForCurrent = placeToMatchingShapes.get(place);
+                            matchingForCurrent.get(place);
+                            //placeToMatchingShapes.remove(place);
+                            //matchingForCurrent = solveHelper.findMatchingShape(place, col, resultEnlarged, indexOfShapes);
+                            //placeToMatchingShapes.put(place, matchingForCurrent);
                         }
                         counter=0;
                     }else {

@@ -1,3 +1,4 @@
+package com.puzzle.utils;
 
 import com.puzzle.common.entities.Piece;
 
