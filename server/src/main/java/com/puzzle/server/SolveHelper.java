@@ -1,12 +1,9 @@
 package com.puzzle.server;
 
-import com.puzzle.utils.entities.Piece;
-import com.puzzle.utils.entities.Shape;
 
-import javax.swing.text.html.parser.Parser;
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import com.puzzle.common.entities.Piece;
+import com.puzzle.common.entities.Shape;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -15,55 +12,23 @@ import static java.util.stream.Collectors.*;
 
 public class SolveHelper {
     private List<Piece> pieces;
-    private Map<Shape, List<Integer>> existingShapesToIds;
-    private Shape[] resultEnlarged;
+    private Map<Shape, List<Piece>> existingShapesToPieces;
 
-    public Map<Shape, List<Integer>> getExistingShapesToIds() {
-        return existingShapesToIds;
+    public Map<Shape, List<Piece>> getExistingShapesToIds() {
+        return existingShapesToPieces;
     }
 
     public SolveHelper(List<Piece> pieces) {
         this.pieces = pieces;
-        existingShapesToIds = pieces.stream().collect(groupingBy(Piece::getShape, mapping(Piece::getId, toList())));
+        existingShapesToPieces = pieces.stream().collect(groupingBy(Piece::getShape, mapping(Function.identity(), toList())));
     }
 
-    private Map<String, Map<Shape, Long>> createIndexOfShapesByLeftTopSides(){
+    public Map<String, Map<Shape, Long>> createIndexOfShapesByLeftTopSides(){
         Map<String, Map<Shape, Long>> indexOfPieces = new LinkedHashMap<>();
 
        indexOfPieces = pieces.stream()
                 .collect(Collectors.groupingBy(Piece::getLeftTopKey,
                         Collectors.groupingBy(Piece::getShape, Collectors.counting())));
-
-      /* Map<Shape, Long> shapesByAmount = pieces.stream().collect(Collectors.groupingBy(Piece::getShape, Collectors.counting()));
-
-  *//*      Map<Shape, Long> shapesByAmountSorted = new LinkedHashMap<>();
-        shapesByAmount.entrySet().stream()
-                .sorted(Map.Entry.<Shape, Long>comparingByValue().reversed())
-                .forEachOrdered(x -> shapesByAmountSorted.put(x.getKey(), x.getValue()));
-*//*
-     *//*  //Sort by amount of shapes
-        Map<Shape, Long> shapesByAmountSorted = shapesByAmount.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                        (oldValue, newValue) -> oldValue, HashMap::new));*//*
-
-        //create final map with left-top index key
-        for(Map.Entry<Shape, Long> entry: shapesByAmount.entrySet()){
-            String leftTopKey = getKeyForShapesIndex(entry.getKey());
-
-            if(indexOfPieces.get(leftTopKey)==null){
-                Map<Shape, Long> ShapesByAmountFiltered = shapesByAmount.entrySet()
-                        .stream().filter(e->getKeyForShapesIndex(e.getKey()).equalsIgnoreCase(leftTopKey))
-                        .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
-
-                Map<Shape, Long> shapesByAmountFilteredAndSorted = new LinkedHashMap<>();
-                ShapesByAmountFiltered.entrySet().stream()
-                        .sorted(Map.Entry.<Shape, Long>comparingByValue().reversed())
-                        .forEachOrdered(x -> shapesByAmountFilteredAndSorted.put(x.getKey(), x.getValue()));
-
-                indexOfPieces.put(leftTopKey, shapesByAmountFilteredAndSorted);
-            }
-        }*/
 
         return indexOfPieces;
     }
@@ -84,7 +49,7 @@ public class SolveHelper {
         return bigPuzzle;
     }
 
-    public boolean tryToSolvePuzzleInShapes(int numOfLines) {
+    /*public boolean isSolutionInShapesExists(int numOfLines) {
 
         resultEnlarged = createPuzzleEnlargedByStraitPieces(numOfLines);
 
@@ -135,6 +100,8 @@ public class SolveHelper {
             } else {
                 while (matchingForCurrent.isEmpty() && place>col+1) {
                     counter++;
+                    //In case of continues forward-backward steps in the same place, return several steps backward
+                    //to increase a chance of selecting different path
                     if(counter>3){
                         int numOfBackSteps = Math.min(5, place - (col + 1)); // it's impossible to step back more than first place in the original puzzle
                         for(int i=0; i<numOfBackSteps; i++){
@@ -142,19 +109,18 @@ public class SolveHelper {
                             returnPreviousChoiceToIndex(resultEnlarged[place], indexOfShapes);
                             resultEnlarged[place] = null;
                             matchingForCurrent = placeToMatchingShapes.get(place);
-                            counter=0;
                         }
+                        counter=0;
                     }else {
                         place = previousPlace(place, col);
                         returnPreviousChoiceToIndex(resultEnlarged[place], indexOfShapes);
                         resultEnlarged[place] = null;
-
                         matchingForCurrent = placeToMatchingShapes.get(place);
                     }
                 }
-                /*if (isNoAnyMatches(indexOfShapes)) {
+                *//*if (isNoAnyMatches(indexOfShapes)) {
                     return false;
-                }*/
+                }*//*
                 if (place==col + 1 && matchingForCurrent.isEmpty()) {
                     System.out.println("No solution");
                     return false;
@@ -162,9 +128,9 @@ public class SolveHelper {
             }
         }
         return false;
-    }
+    }*/
 
-    private Shape findShapeWithMaxOccuranceInIndex(List<Shape> matchingForCurrent, Map<String, Map<Shape, Long>> indexOfShape){
+    public Shape findShapeWithMaxOccuranceInIndex(List<Shape> matchingForCurrent, Map<String, Map<Shape, Long>> indexOfShape){
         Long counter = 0L;
         Shape nextShape = null;
         for(Shape shape : matchingForCurrent){
@@ -179,7 +145,7 @@ public class SolveHelper {
         return nextShape;
     }
 
-    private void returnPreviousChoiceToIndex(Shape shape, Map<String, Map<Shape, Long>> indexOfShapes) {
+    public void returnPreviousChoiceToIndex(Shape shape, Map<String, Map<Shape, Long>> indexOfShapes) {
         String key = getKeyForShapesIndex(shape);
 
         Map<Shape, Long> shapePerAmount = indexOfShapes.get(key);
@@ -192,11 +158,11 @@ public class SolveHelper {
     }
 
     //need to avoid first column of added "strait" pieces
-    private int previousPlace(int place, int col) {
+    public int previousPlace(int place, int col) {
         return (place - 1) % col != 0 ? place - 1 : place-2;
     }
 
-    private int nextPlace(int place, int col, int puzzleSize) {
+    public int nextPlace(int place, int col, int puzzleSize) {
      if ((place + 1) % col != 0){
             return place + 1;
         }else {
@@ -204,7 +170,7 @@ public class SolveHelper {
         }
     }
 
-    private void removeFromIndex(Shape currentShape, Map<String, Map<Shape, Long>> indexOfShapes) {
+    public void removeFromIndex(Shape currentShape, Map<String, Map<Shape, Long>> indexOfShapes) {
         String key = getKeyForShapesIndex(currentShape);
 
         Map<Shape, Long> shapePerAmount = indexOfShapes.get(key);
@@ -221,7 +187,7 @@ public class SolveHelper {
         return String.valueOf(currentShape.getSides()[0])+String.valueOf(currentShape.getSides()[1]);
     }
 
-    private boolean isNoAnyMatches(Map<String, Map<Shape, Long>> indexOfShapes) {
+    public boolean isNoAnyMatches(Map<String, Map<Shape, Long>> indexOfShapes) {
 
        for(String str: indexOfShapes.keySet()){
            if(!indexOfShapes.get(str).isEmpty()){
@@ -231,7 +197,7 @@ public class SolveHelper {
        return true;
     }
 
-    private List<Shape> findMatchingShape(int place, int col, Shape[] resultEnlarged, Map<String, Map<Shape, Long>> indexOfShapes) {
+    public List<Shape> findMatchingShape(int place, int col, Shape[] resultEnlarged, Map<String, Map<Shape, Long>> indexOfShapes) {
 
         List<Shape> matchingShapes = new ArrayList<>();
 
@@ -271,21 +237,6 @@ public class SolveHelper {
 
     private boolean isPlaceNotOnEdges(int place, int col, int puzzleSize) {
         return place < puzzleSize - col && place % col != col-1;
-    }
-
-    public Shape[] getResultEnlarged() {
-        return resultEnlarged;
-    }
-
-    public static void main(String[] args){
-        List<Piece> testedPieces = new ArrayList<>();
-
-        com.puzzle.server.Parser puzzleParser = new com.puzzle.server.Parser(Paths.get("C:\\Ella\\solvable8x9_2.txt"));
-        SolveHelper solveHelper = new SolveHelper(puzzleParser.parse());
-
-        //SolveHelper solveHelper = new SolveHelper(testedPieces);
-        solveHelper.tryToSolvePuzzleInShapes(8);
-        printPuzzle(solveHelper.resultEnlarged, 9);
     }
 
     private static void printPuzzle(Shape[] shapes, int numOfLines) {

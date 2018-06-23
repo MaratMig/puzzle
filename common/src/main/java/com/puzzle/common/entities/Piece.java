@@ -51,7 +51,7 @@ public class Piece {
     }
 
     public Shape getShape() {
-        return new Shape(sides);
+        return new Shape(piece);
     }
 
     public String getLeftTopKey(){

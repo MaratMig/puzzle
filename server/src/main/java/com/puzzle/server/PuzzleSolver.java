@@ -1,20 +1,18 @@
 package com.puzzle.server;
 
-import com.puzzle.common.MatchingUtils;
 import com.puzzle.common.entities.Piece;
-import com.puzzle.utils.entities.Shape;
+import com.puzzle.common.entities.Shape;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class PuzzleSolver {
 
     List<Piece> pieces;
     Integer numOfLines;
     Piece[] result;
+    Shape[] resultEnlarged;
     private SolveHelper solveHelper;
 
     public PuzzleSolver(List<Piece> pieceList, Integer numOfLines) {
@@ -24,33 +22,39 @@ public class PuzzleSolver {
         solveHelper = new SolveHelper(pieces);
     }
 
+    private void initResultEnlarged(){
+        resultEnlarged = solveHelper.createPuzzleEnlargedByStraitPieces(numOfLines);
+    }
+
+    public boolean tryToSolvePuzzleRectangle(){
+        if(isSolutionInShapesExists(numOfLines)){
+            createResultFromSolutionInShapes(resultEnlarged);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public Piece[] getResult() {
         return result;
     }
 
-    private List<Integer> createSolutionAsListOfIds(Shape[] solutionInShapes){
-        Map<Shape, List<Integer>> existingShapesToIds = solveHelper.getExistingShapesToIds();
-        List<Integer> ids = new ArrayList<>();
+    private void createResultFromSolutionInShapes(Shape[] solutionInShapes){
 
-        int rows = numOfLines + 1;
+        Map<Shape, List<Piece>> existingShapesToPieces = solveHelper.getExistingShapesToIds();
+
         int columns = pieces.size() / numOfLines + 1;
 
-        for(int i =0; i<rows*columns; i++){
-            if(i>columns && i%columns!=0){
-                Integer id = existingShapesToIds.get(solutionInShapes[i]).get(0);
-                ids.add(id);
-
-                List<Integer> idsOfShape = existingShapesToIds.get(solutionInShapes[i]);
-                idsOfShape.remove(id);
-
-                existingShapesToIds.put(solutionInShapes[i], idsOfShape);
+        for(int i =0; i<resultEnlarged.length; i++){
+            if(i>columns && i%columns!=0){ //avoid added strait pieces
+                List<Piece> matchingPieces = existingShapesToPieces.get(solutionInShapes[i]);
+                result[i] = matchingPieces.get(0);
+                matchingPieces.remove(result[i]);
             }
         }
-
-        return ids;
     }
 
-    public boolean tryToSolvePuzzleRectangle() {
+    /*public boolean tryToSolvePuzzleRectangle() {
 
         int col = pieces.size() / numOfLines;
 
@@ -217,15 +221,83 @@ public class PuzzleSolver {
             }
         }
         return true;
+    }*/
+
+    public boolean isSolutionInShapesExists(int numOfLines) {
+
+        initResultEnlarged();
+
+        int newNumOfLines = numOfLines+1;
+        int bigPuzzleSize = resultEnlarged.length;
+        int col = bigPuzzleSize / newNumOfLines;
+
+        //This map will be updated during finding solution process;
+        //Taken Shape will be removed (while step forward) / added back(while step backward)
+        Map<String, Map<Shape, Long>> indexOfShapes = solveHelper.createIndexOfShapesByLeftTopSides();
+
+        //Map of matching for place Shapes - will be used during "step backward" in case there is no possible option to continue
+        Map<Integer, List<Shape>> placeToMatchingShapes = new HashMap<>();
+
+        //Starting place is a second piece in the second line (since puzzle was enlarged by strait pieces)
+        int place = col + 1;
+
+        //First list of matching Shapes
+        List<Shape> matchingForCurrent = solveHelper.findMatchingShape(place, col, resultEnlarged, indexOfShapes);
+
+        Shape currentShape = null;
+        int counter = 0;
+        Map<Integer, Integer> placeToNumberOfBackSteps = new HashMap<>();
+        while (place <= bigPuzzleSize - 1 || solveHelper.isNoAnyMatches(indexOfShapes)) {
+            while (place <= bigPuzzleSize - 1 && !matchingForCurrent.isEmpty()) {
+
+                if(!matchingForCurrent.isEmpty()) {
+
+                    //It's better to take a shape with max occurance from all possible options;
+                    //It should decrease a chance for missing such shape at the next steps.
+                    currentShape = solveHelper.findShapeWithMaxOccuranceInIndex(matchingForCurrent, indexOfShapes);
+
+                    //currently used Piece should be removed from possible options and from free for selection list of Pieces.
+                    matchingForCurrent.remove(currentShape);
+                    solveHelper.removeFromIndex(currentShape, indexOfShapes);
+                    resultEnlarged[place] = currentShape;
+
+                    placeToMatchingShapes.put(place, matchingForCurrent);
+                    place=solveHelper.nextPlace(place, col, bigPuzzleSize);
+                }
+                if(place<bigPuzzleSize) {//no need to find a match after last iteration
+                    matchingForCurrent = solveHelper.findMatchingShape(place, col, resultEnlarged, indexOfShapes);
+                }
+            }
+            if (place >= bigPuzzleSize) {
+                return true; //Puzzle is solved in Shapes
+            } else {
+                while (matchingForCurrent.isEmpty() && place>col+1) {
+                    counter++;
+                    //In case of continues forward-backward steps in the same place, return several steps backward
+                    //to increase a chance of selecting different path
+                    if(counter>3){
+                        int numOfBackSteps = Math.min(5, place - (col + 1)); // it's impossible to step back more than first place in the original puzzle
+                        for(int i=0; i<numOfBackSteps; i++){
+                            place = solveHelper.previousPlace(place, col);
+                            solveHelper.returnPreviousChoiceToIndex(resultEnlarged[place], indexOfShapes);
+                            resultEnlarged[place] = null;
+                            matchingForCurrent = placeToMatchingShapes.get(place);
+                        }
+                        counter=0;
+                    }else {
+                        place = solveHelper.previousPlace(place, col);
+                        solveHelper.returnPreviousChoiceToIndex(resultEnlarged[place], indexOfShapes);
+                        resultEnlarged[place] = null;
+                        matchingForCurrent = placeToMatchingShapes.get(place);
+                    }
+                }
+                if (place==col + 1 && matchingForCurrent.isEmpty()) {
+                    //System.out.println("No solution");
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 
-    public boolean tryToSolvePuzzleRectangleNew() {
-        if(solveHelper.tryToSolvePuzzleInShapes(numOfLines)){
-            List<Integer> solutionIds = createSolutionAsListOfIds(solveHelper.getResultEnlarged());
-            solutionIds.stream().forEach(id->System.out.println(id+" "));
-            return true;
-        }else {
-            return false;
-        }
-    }
 }

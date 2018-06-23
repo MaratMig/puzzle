@@ -35,8 +35,8 @@ public class PuzzleServerManager  {
         boolean solutionFound = false;
         for (Integer numOfLines : boardSize) {
             puzzleSolver = new PuzzleSolver(puzzlePieces, numOfLines);
-            if (puzzleSolver.tryToSolvePuzzleRectangleNew()) {
-                //Piece[] solutions = puzzleSolver.getResult();
+            if (puzzleSolver.tryToSolvePuzzleRectangle()) {
+                Piece[] solutions = puzzleSolver.getResult();
                 solutionFound = true;
                 return prepareSolutionObject(solutions, numOfLines);
             }
@@ -63,14 +63,6 @@ public class PuzzleServerManager  {
     private PuzzleSolution prepareValidationErrorsObject() {
         List<String> validatorErrors = puzzleValidator.getErrorCollection();
         return  new PuzzleSolution(false, validatorErrors);
-    }
-
-    public static void main(String[] args){
-        com.puzzle.server.Parser puzzleParser = new com.puzzle.server.Parser(Paths.get("C:\\Ella\\solvable5x8_2.txt"));
-
-        PuzzleServerManager puzzleServerManager = new PuzzleServerManager();
-        puzzleServerManager.startGame(puzzleParser.parse());
-
     }
 }
 
