@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class Connector {
 
@@ -15,8 +16,8 @@ public class Connector {
 
         try ( // try with resource for all the below
               Socket socket = new Socket(ClientConfigManager.getIp(), ClientConfigManager.getPort());
-              BufferedReader socketInput = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF8"));
-              PrintStream socketOutput = new PrintStream(socket.getOutputStream(), /* autoflush */ true, "UTF8");) {
+              BufferedReader socketInput = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+              PrintStream socketOutput = new PrintStream(socket.getOutputStream(), /* autoflush */ true, StandardCharsets.UTF_8.toString());) {
             // Thread for handling server input
 
 

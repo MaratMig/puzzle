@@ -50,4 +50,18 @@ public class ClientConfigManager {
     public static void setOutputPath(String outputPath) {
         ClientConfigManager.outputPath = outputPath;
     }
+
+    public void init(String ip, String port, String inputPath, String outputPath) {
+
+        setInputPath(inputPath);
+        setOutputPath(outputPath);
+        setIp(ip);
+        try {
+            setPort(Integer.valueOf(port));
+        } catch (Exception e) {
+            System.out.println("port value should be numeric");
+            System.exit(0);
+        }
+
+    }
 }
