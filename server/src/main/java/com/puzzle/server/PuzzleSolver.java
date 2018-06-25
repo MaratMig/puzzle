@@ -1,10 +1,8 @@
 package com.puzzle.server;
 
-import com.puzzle.client.fileHandlers.Parser;
 import com.puzzle.common.entities.Piece;
 import com.puzzle.common.entities.Shape;
 
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

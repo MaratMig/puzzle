@@ -157,20 +157,4 @@ public class SolveHelper {
     private boolean isPlaceNotOnEdges(int place, int col, int puzzleSize) {
         return place < puzzleSize - col && place % col != col-1;
     }
-
-    private static void printPuzzle(Shape[] shapes, int numOfLines) {
-        StringBuffer outPut = new StringBuffer();
-        outPut.append(String.format("Solution for %s lines:", numOfLines));
-        outPut.append("\n\n");
-        int col = shapes.length / numOfLines;
-        for (int i = 0; i < shapes.length; i++) {
-            outPut.append(shapes[i].toString() + " ");
-            if ((i % col == col - 1 && col != 1) || col == shapes.length) {
-                outPut.append("\n");
-            }
-        }
-        System.out.println(outPut.toString());
-        System.out.println("Number of pieces: " + shapes.length);
-        System.out.println("Last piece: " + shapes[shapes.length-1].toString());
-    }
 }
