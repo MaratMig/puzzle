@@ -1,6 +1,4 @@
 package com.puzzle.server;
-
-
 import com.puzzle.common.entities.Piece;
 import com.puzzle.common.entities.Shape;
 
