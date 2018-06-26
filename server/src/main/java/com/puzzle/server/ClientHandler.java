@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 
 public class ClientHandler extends Thread {
@@ -27,8 +28,8 @@ public class ClientHandler extends Thread {
 
     @Override
     public void run() {
-        try (BufferedReader clientInput = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF8"));
-             PrintStream clientOutput = new PrintStream(socket.getOutputStream(), /* autoflush */ true, "UTF8");) {
+        try (BufferedReader clientInput = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+             PrintStream clientOutput = new PrintStream(socket.getOutputStream(), /* autoflush */ true, StandardCharsets.UTF_8.toString());) {
             this.clientOutput = clientOutput;
             String line = "";
             System.out.println("Client: " + clientNum + " is connected now ");

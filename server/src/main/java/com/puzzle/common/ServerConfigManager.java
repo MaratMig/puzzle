@@ -2,34 +2,42 @@ package com.puzzle.common;
 
 public class ServerConfigManager {
 
-    private static ServerConfigManager INSTANCE;
-    private static int threadsNum;
-    private static int port;
+    private static ServerConfigManager INSTANCE = new ServerConfigManager();
+    private int threadsNum;
+    private int port;
 
     private ServerConfigManager() {
+
     }
 
     public static ServerConfigManager getInstance() {
-        if(INSTANCE == null) {
-            INSTANCE = new ServerConfigManager();
-        }
-
         return INSTANCE;
     }
 
-    public static int getThreadsNum() {
+    public int getThreadsNum() {
         return threadsNum;
     }
 
-    public static void setThreadsNum(int threadsNum) {
-        ServerConfigManager.threadsNum = threadsNum;
+    public void setThreadsNum(int threadsNum) {
+        this.threadsNum = threadsNum;
     }
 
-    public static int getPort() {
+    public int getPort() {
         return port;
     }
 
-    public static void setPort(int port) {
-        ServerConfigManager.port = port;
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public void init(String threads, String port) {
+        try {
+            setThreadsNum(Integer.valueOf(threads));
+            setPort(Integer.valueOf(port));
+        } catch (Exception e) {
+            System.out.println("threads / port values should be numeric");
+            System.exit(0);
+        }
+
     }
 }

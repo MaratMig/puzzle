@@ -21,12 +21,13 @@ public class ServerExecutor {
     public ServerExecutor() {
     }
 
-    public void startSever(int threads, int port) throws InterruptedException {
+    public void startServer(int threads, int port) throws InterruptedException {
         ExecutorService executor = Executors.newFixedThreadPool(threads);
         int ClientNum = 1;
 
         try {
             server = new ServerSocket(port);
+            System.out.println("<<< SERVER STARTED >>>\n");
         } catch (IOException e) {
             e.printStackTrace();
             return;

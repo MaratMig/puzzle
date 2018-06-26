@@ -23,7 +23,7 @@ public class PuzzleClientRunner implements Runnable {
     }
 
     public void startClient() {
-        ArrayList<Piece> puzzlePieces = startParser();
+        List<Piece> puzzlePieces = startParser();
         if (puzzlePieces != null) {
 
             //create json object
@@ -98,10 +98,9 @@ public class PuzzleClientRunner implements Runnable {
         outPutFileGenerator.writeResultToFile(fileToHandle, str);
     }
 
-    private ArrayList<Piece> startParser() {
+    private List<Piece> startParser() {
         parser = new Parser(fileToHandle);
-        ArrayList<Piece> puzzelPiecesInput = parser.parse();
-        return puzzelPiecesInput;
+        return parser.parse();
     }
 
     @Override

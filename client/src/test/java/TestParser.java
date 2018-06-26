@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ParserTests {
+public class TestParser {
 
     private static final String resourceDir = ("src/test/resources/filesToParse/");
 

@@ -9,7 +9,7 @@ public class MainClient {
     public static void main(String[] args) throws Exception {
 
         System.out.println("Please note that ip, port, Input and Output values can be override by System property");
-
+        System.out.println("e.g. -Dip=localhost, -Dport=7000, -DinputPath=c:\\puzzle, -DouptutPath=c:\\puzzle\\output");
         String ip = System.getProperty("ip", "127.0.0.1");
         System.out.println("Client ip: " + ip);
         String port = System.getProperty("port", "7095");
@@ -20,17 +20,7 @@ public class MainClient {
         System.out.println("OutputPath: " + outputPath);
 
         ClientConfigManager conf = ClientConfigManager.getInstance();
-        conf.setInputPath(inputPath);
-        conf.setOutputPath(outputPath);
-        conf.setIp(ip);
-        try {
-            conf.setPort(Integer.valueOf(port));
-        } catch (Exception e) {
-            System.out.println("port value should be numeric");
-            System.exit(0);
-        }
-
-        System.out.println("<<< CLIENT STARTED >>>\n");
+        conf.init(ip, port, inputPath, outputPath);
         ClientExecutor clientExecutor = new ClientExecutor();
         clientExecutor.startGames(conf.getInputPath());
     }
