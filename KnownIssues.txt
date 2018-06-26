@@ -1,16 +1,7 @@
-Release notes
-Project in its current state contains naive parser with some basic validations and solver for puzzles with small amount of pieces (up to 45).
-
 Known issues
-Missing features
-1.	Parser functional is under construction - missing error aggregation
 
-2.	Several input file validations aren't supported. 
-3.	Possible validations for number of strait sides isn’t supported (program tries to solve puzzle in case of number of lines that can be eliminated before).
-4.	Algorithm doesn't support big (>45) amount of pieces.
-
-Known issues in design
-1.	There is a lack in generic algorithm logic: puzzles of 1 line and 1 column are treated separately.
-2.	Missing unit tests.
+1. Some times it took long time to solve big puzzles
+2. Missing unit tests that test client server communication
+3. In general there is place for more unit tests
 
 
