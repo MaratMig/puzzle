@@ -1,7 +1,7 @@
 Known issues
 
-1. Some times it took long time to solve big puzzles
-2. Missing unit tests that test client server communication
-3. In general there is place for more unit tests
+1. Sometimes it tooks a long time to solve big (more than 60 pieces) puzzles
+2. Missing unit tests that tests client server communication
+3. In general there is a place for more unit tests
 
 

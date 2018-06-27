@@ -1,9 +1,16 @@
 
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import com.puzzle.common.entities.Piece;
+import com.puzzle.common.jsonPojo.ClientRequest;
 import com.puzzle.server.PuzzleSolver;
 import com.puzzle.utils.TestingUtils;
 import org.junit.Test;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -132,5 +139,47 @@ public class PuzzleSolverTests {
 
         assertTrue(testingUtils.isPuzzleSolved(result, 2));
     }
+
+    @Test
+    public void solvePuzzle40Pieces() {
+
+        try(BufferedReader bufferedReader = new BufferedReader(new FileReader("src\\test\\resources\\solvablePuzzles\\solvable5on8.json"))) {
+            Gson gson = new Gson();
+            ClientRequest puzzleToSolve = gson.fromJson(bufferedReader, ClientRequest.class);
+            List<Piece> pieces = puzzleToSolve.getPieces().getPieces();
+
+            PuzzleSolver puzzleSolver = new PuzzleSolver(pieces,5);
+            puzzleSolver.tryToSolvePuzzleRectangle();
+            Piece[] result = puzzleSolver.getResult();
+
+            assertTrue(testingUtils.isPuzzleSolved(result, 5));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void nonSolveblePuzzle() {
+
+        try(BufferedReader bufferedReader = new BufferedReader(new FileReader("src\\test\\resources\\solvablePuzzles\\nonSolvableon8.json"))) {
+            Gson gson = new Gson();
+            ClientRequest puzzleToSolve = gson.fromJson(bufferedReader, ClientRequest.class);
+            List<Piece> pieces = puzzleToSolve.getPieces().getPieces();
+
+            PuzzleSolver puzzleSolver = new PuzzleSolver(pieces,5);
+            puzzleSolver.tryToSolvePuzzleRectangle();
+            Piece[] result = puzzleSolver.getResult();
+
+            assertTrue(testingUtils.isPuzzleSolved(result, 5));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
 
