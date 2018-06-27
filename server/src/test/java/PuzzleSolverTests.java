@@ -159,27 +159,5 @@ public class PuzzleSolverTests {
             e.printStackTrace();
         }
     }
-
-    @Test
-    public void nonSolveblePuzzle() {
-
-        try(BufferedReader bufferedReader = new BufferedReader(new FileReader("src\\test\\resources\\solvablePuzzles\\nonSolvableon8.json"))) {
-            Gson gson = new Gson();
-            ClientRequest puzzleToSolve = gson.fromJson(bufferedReader, ClientRequest.class);
-            List<Piece> pieces = puzzleToSolve.getPieces().getPieces();
-
-            PuzzleSolver puzzleSolver = new PuzzleSolver(pieces,5);
-            puzzleSolver.tryToSolvePuzzleRectangle();
-            Piece[] result = puzzleSolver.getResult();
-
-            assertTrue(testingUtils.isPuzzleSolved(result, 5));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
 }
 
