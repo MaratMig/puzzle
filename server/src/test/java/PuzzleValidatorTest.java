@@ -165,21 +165,6 @@ class PuzzleValidatorTest {
 
     @Test
     void puzzleNotValidDueToMissingPossibleNumberOfLines(){
-/*
-        public Set<Integer> getValidNumOfRows() {
-            Set<Integer> possibleNumOfLines = getPosibleNumRows();
-            Set<Integer> numOfLinesAfterElimination = new HashSet<>();
-
-            for (int numOfLines : possibleNumOfLines) {
-                int numOfCol = pieces.size() / numOfLines;
-
-                if (getNumOfStraitTopEdges() >= numOfCol && getNumOfStraitBottomEdges() >= numOfCol
-                        && getNumOfStraitRightEdges() >= numOfLines && getNumOfStraitLeftEdges() >= numOfLines) {
-                    numOfLinesAfterElimination.add(numOfLines);
-                }
-            }
-            return numOfLinesAfterElimination;
-        }*/
         ArrayList<Piece> pieces = new ArrayList<>();
 
         Piece piece1 = new Piece(1, new int[]{0, 0, -1, 0});
